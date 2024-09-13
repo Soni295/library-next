@@ -15,6 +15,7 @@ export const DASHBOARD_PATH = {
   HOME: `${DASHBOARD_BASE}`,
   PRODUCT: `${DASHBOARD_BASE}/product`,
   PRODUCTS_CREATE: `${DASHBOARD_BASE}/product/create`,
+  PURCHASE_CREATE: `${DASHBOARD_BASE}/purchase/create`,
   USERS: `${DASHBOARD_BASE}/user`,
   CATEGORY: `${DASHBOARD_BASE}/category`,
   MARK: `${DASHBOARD_BASE}/mark`,

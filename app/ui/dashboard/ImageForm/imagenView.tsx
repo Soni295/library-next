@@ -9,7 +9,7 @@ interface ImageViewProps extends PropsWithClassName {
 
 export function ImagenView({ src, alt, className = '' }: ImageViewProps) {
   const cls = clsx(
-    'h-[20rem] w-[20rem] m-auto',
+    'h-[10rem] w-[10rem] m-auto',
     'text-center grid items-center',
     'bg-slate-900/30 rounded-lg',
     className,

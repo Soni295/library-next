@@ -12,6 +12,9 @@ export type ProductId = Pick<ProductPrisma, 'id'>;
 @injectable()
 export class ProductRepository {
   async save(product: ProductCreateInput): Promise<MaybeProduct> {
+    const mark = product.markId
+      ? { mark: { connect: { id: product.markId } } }
+      : {};
     return await prisma.product.create({
       data: {
         name: product.name,
@@ -19,10 +22,10 @@ export class ProductRepository {
         minQuantity: product.minQuantity,
         description: product.description,
         code: product.code,
-        mark: { connect: { id: product.markId } },
         basePrice: product.basePrice,
         enable: product.enable,
         photo: product.photo,
+        ...mark,
       },
     });
   }

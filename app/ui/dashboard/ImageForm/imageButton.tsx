@@ -16,7 +16,7 @@ export function ImagenButton({
   return (
     <div className={cls}>
       <label
-        className="bg-blue-400 m-auto p-2 rounded-xl cursor-pointer"
+        className="bg-blue-400 m-auto px-[1rem] py-[0.1rem] rounded-xl cursor-pointer"
         htmlFor="image"
       >
         {msg}

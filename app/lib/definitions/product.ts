@@ -9,7 +9,7 @@ const photo = z.string().min(1, { message: 'La foto es necesaria' });
 const basePrice = z
   .number({ message: 'el precio base es requerido' })
   .nonnegative({ message: 'el precio base no puede ser negativo' });
-const markId = z.number();
+const markId = z.number().nullish();
 const enable = z.boolean();
 const quantity = z.number();
 const minQuantity = z.number();

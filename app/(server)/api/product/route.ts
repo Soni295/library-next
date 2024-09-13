@@ -1,7 +1,6 @@
 import { NextRequest } from 'next/server';
-import { markController } from '@/controllers';
-import { handlerErr, successResponse } from '@/app/(server)/api/lib/utils';
 import { productCtrl } from '@/app/lib/compose/inversify';
+import { handlerErr, successResponse } from '@/app/(server)/api/lib/utils';
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;

@@ -1,12 +1,11 @@
 import { inject, injectable } from 'inversify';
-import { type IProductRepository } from '@/repositories/productRepository';
+import { type ProductRepository } from '@/repositories/productRepository';
 import { Product } from '@prisma/client';
 import { ProductCreateInputSchema } from '@/app/lib/definitions/product';
 import { GeneralController } from './mainController';
 import { handlerImgProduct } from '@/app/lib/utils/handleImage';
 import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { TypesCompose } from '@/app/lib/compose';
-import { PageSearchBasic } from '@/repositories/markRepository';
 import { PageSearchFilter } from '@/repositories';
 
 export interface IProduct extends Omit<Product, 'photos'> {
@@ -17,7 +16,7 @@ export interface IProduct extends Omit<Product, 'photos'> {
 export class ProductController extends GeneralController {
   constructor(
     @inject(TypesCompose.productRepo)
-    private readonly productRepository: IProductRepository,
+    private readonly productRepository: ProductRepository,
   ) {
     super();
   }
@@ -28,12 +27,13 @@ export class ProductController extends GeneralController {
       const file = formData.get('photo') as File;
       const photo = await handlerImgProduct.saveFile(file);
 
+      const mark = formData.get('mark');
       const validatedProduct = ProductCreateInputSchema.safeParse({
         name: formData.get('name'),
         description: formData.get('description'),
         code: formData.get('code'),
         basePrice: Number(formData.get('basePrice')),
-        markId: Number(formData.get('mark')),
+        markId: mark === 'No asignada' ? null : Number(mark),
         enable: formData.get('enable') === '1',
         photo: photo,
         quantity: Number(formData.get('quantity')),
@@ -54,6 +54,7 @@ export class ProductController extends GeneralController {
       if (err instanceof PrismaClientValidationError) {
         console.log('alto error PrismaClientValidationError', err.message);
       }
+      console.log(err);
 
       if (err instanceof Error) {
         return {
@@ -70,36 +71,36 @@ export class ProductController extends GeneralController {
     return this.productRepository.getById({ id });
   }
   /*
-  async getByCategoryId(categoryId: number) {
-    return await prisma.product.findMany({
-      where: { categoryId: categoryId, deletedAt: null },
-    });
-  }
+	async getByCategoryId(categoryId: number) {
+		return await prisma.product.findMany({
+			where: { categoryId: categoryId, deletedAt: null },
+		});
+	}
 
-  async getByProductNameAndCategoryId(categoryId: number, productName: string) {
-    return await prisma.product.findMany({
-      where: { name: productName, categoryId: categoryId, deletedAt: null },
-    });
-  }
+	async getByProductNameAndCategoryId(categoryId: number, productName: string) {
+		return await prisma.product.findMany({
+			where: { name: productName, categoryId: categoryId, deletedAt: null },
+		});
+	}
 
-  async getAll() {
-    return await prisma.product.findMany({ where: { deletedAt: null } });
-  }
+	async getAll() {
+		return await prisma.product.findMany({ where: { deletedAt: null } });
+	}
 
-  async update(product: IProduct) {
-    return await prisma.product.update({
-      where: { id: product.id },
-      data: { ...product, updateAt: new Date() },
-    });
-  }
+	async update(product: IProduct) {
+		return await prisma.product.update({
+			where: { id: product.id },
+			data: { ...product, updateAt: new Date() },
+		});
+	}
 
-  async deleteById(productId: number) {
-    return await prisma.product.update({
-      where: { id: productId },
-      data: { deletedAt: new Date() },
-    });
-  }
-  */
+	async deleteById(productId: number) {
+		return await prisma.product.update({
+			where: { id: productId },
+			data: { deletedAt: new Date() },
+		});
+	}
+	*/
   async getProductsByFilter(pageSearchFilter: PageSearchFilter) {
     return this.productRepository.getProductsByFilter(pageSearchFilter);
   }

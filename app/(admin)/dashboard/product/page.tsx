@@ -2,12 +2,13 @@
 
 import axios from 'axios';
 import { useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { SERVER_PATH } from '@/app/lib/paths';
+import { Suspense, useEffect, useState } from 'react';
+import { DASHBOARD_PATH, SERVER_PATH } from '@/app/lib/paths';
 import { Row, TBody, THead, Table, Td, Th } from '@/app/ui/tables';
 import { type ProductPage } from '@/repositories';
 import { Question } from '@/app/ui/question';
 import { Pagination } from '@/app/ui/pagination';
+import { NotFound } from '@/app/ui/notFound';
 
 function useProdcutPage() {
   const [data, setData] = useState<ProductPage>({
@@ -42,10 +43,21 @@ function useProdcutPage() {
   return [data];
 }
 
-export default function ProductPage() {
-  const [data] = useProdcutPage();
+function ProductsTableEmpty() {
   return (
-    <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
+    <NotFound
+      msgLink="por favor cree un producto"
+      msg="No hay productos"
+      href={DASHBOARD_PATH.PRODUCTS_CREATE}
+    />
+  );
+}
+
+async function ProductTable() {
+  const [data] = useProdcutPage();
+  if (data.data.length === 0) return <ProductsTableEmpty />;
+  return (
+    <>
       <Table>
         <THead>
           <Th>ID</Th>
@@ -81,6 +93,20 @@ export default function ProductPage() {
         </TBody>
       </Table>
       <Pagination totalPages={data.totalPages} />
+    </>
+  );
+}
+
+function LoadingInfo() {
+  return <div>Cargando...</div>;
+}
+
+export default function ProductPage() {
+  return (
+    <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
+      <Suspense fallback={<LoadingInfo />}>
+        <ProductTable />
+      </Suspense>
     </div>
   );
 }
