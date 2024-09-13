@@ -1,0 +1,185 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  //provider = "mysql"
+  //url      = env("DATABASE_URL")
+
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id Int @id @default(autoincrement())
+
+  name     String //@db.VarChar(255)
+  email    String  @unique //@db.VarChar(255)
+  password String //@db.VarChar(255)
+  //role     Role    @default(USER)
+  role     String  @default("USER")
+  enable   Boolean @default(true)
+
+  orders    Order[]
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @default(now())
+  deletedAt DateTime?
+}
+
+// enum Role {
+//   USER
+//   ADMIN
+//   SUPERADMIN
+// }
+
+// enum OrderStatus {
+//   Selection
+//   Preparing
+//   Confirmed
+//   Done
+// }
+
+model Category {
+  id Int @id @default(autoincrement())
+
+  name String //@db.VarChar(255)
+  // products Product[]
+
+  categorySuperiorId Int?
+  categorySuperior   Category?  @relation("MainCategorySubCategories", fields: [categorySuperiorId], references: [id])
+  SubCategory        Category[] @relation("MainCategorySubCategories")
+
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @default(now())
+  deletedAt DateTime?
+}
+
+model Mark {
+  id   Int    @id @default(autoincrement())
+  name String //@db.VarChar(255)
+
+  icon   String? //@db.VarChar(255)
+  enable Boolean @default(false)
+
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @default(now())
+  deletedAt DateTime?
+}
+
+model Product {
+  id          Int         @id @default(autoincrement())
+  name        String // @db.VarChar(255)
+  description String? // @db.MediumText
+  code        String? // @db.VarChar(255)
+  photo       String // @db.VarChar(255)
+  basePrice   Decimal //@db.Decimal(7, 2)
+  enable      Boolean     @default(false)
+  quantity    Int         @default(0)
+  minQuantity Int         @default(0)
+  markId      Int?
+  mark        Mark?       @relation(fields: [markId], references: [id])
+  //prices      Price[] // Relación con precios
+  //priceRules  PriceRules[]
+  // categoryId  Int?
+  // category    Category?        @relation(fields: [categoryId], references: [id])
+  // variants    ProductVariant[] // Relación con variantes de producto
+  orderItems  OrderItem[]
+  //order       ProductOnOrder[]
+
+  createdAt      DateTime         @default(now())
+  updateAt       DateTime         @default(now())
+  deletedAt      DateTime?
+  ProductOnOrder ProductOnOrder[]
+}
+
+// model Formula {
+//   id        Int  @id @default(autoincrement())
+//   priceRulesId Int
+//   priceRule PriceRule @relation(fields: [priceRulesId], references: [id])
+//   formula String
+// }
+//
+// model PriceRules {
+//   id        Int  @id @default(autoincrement())
+//   productId Int
+//   product    Product @relation(fields: [productId], references: [id])
+//   minQuantity Int
+//   discountPct  Decimal  @db.Decimal(7, 2)
+//
+//   finalPrice Decimal  @db.Decimal(7, 2)
+//   formula Formula?
+// }
+
+model ProductOnOrder {
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id])
+
+  @@id([productId, orderId])
+}
+
+model OrderItem {
+  id Int @id @default(autoincrement())
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id])
+
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
+
+  quantity Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+model Order {
+  id         Int  @id @default(autoincrement())
+  customerId Int
+  customer   User @relation(fields: [customerId], references: [id])
+
+  //status   OrderStatus      @default(Selection)
+  status     String      @default("Selection")
+  orderItems OrderItem[]
+
+  createdAt      DateTime         @default(now())
+  updateAt       DateTime         @default(now())
+  deletedAt      DateTime?
+  ProductOnOrder ProductOnOrder[]
+}
+
+//
+// model ProductVariant {
+//   id               Int              @id @default(autoincrement())
+//   name             String           @unique @db.VarChar(255)
+//   code             String?          @db.VarChar(255)
+//   photos           Json?            @db.Json
+//   prices           Price[]          // Relación con precios
+//   inventoryQuantity Int             @default(0)
+//   productId        Int
+//   product          Product?         @relation(fields: [productId], references: [id])
+//   createdAt        DateTime         @default(now())
+//   updatedAt        DateTime         @updatedAt
+//   deletedAt        DateTime?
+// }
+
+//
+//
+// model ItemValue {
+//     id Int @id @default(autoincrement())
+//     name String @db.VarChar(255)
+//     price Decimal @db.Decimal(7, 2)
+//
+//     // productID Int
+//     // product Product? @relation(fields: [productID], references: [id])
+//
+//     createdAt DateTime @default(now())
+//     updateAt DateTime @default(now())
+// }
+//

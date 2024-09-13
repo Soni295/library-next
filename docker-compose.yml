@@ -1,0 +1,15 @@
+#version: '3.7'
+
+services:
+  mariadb:
+    container_name: example
+    image: mariadb:10.2.38-bionic
+    ports:
+      - 3306:${DB_PORT}
+    env_file: .env
+    environment:
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MARIADB_ROOT_PASSWORD: ${DB_PASS}
+    volumes:
+      - ./databases/mariadb:/var/lib/mysql:rw

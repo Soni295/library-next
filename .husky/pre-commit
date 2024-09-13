@@ -1,0 +1,4 @@
+# .husky/pre-commit
+# prettier $(git diff --cached --name-only --diff-filter=ACMR | sed 's| |\\ |g') --write --ignore-unknown
+prettier ./controllers/ ./app ./repositories  --write
+git update-index --again
