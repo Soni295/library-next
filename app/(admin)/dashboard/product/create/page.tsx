@@ -25,7 +25,7 @@ export function CreateProductForm() {
 
   const [state, setState] = useState({
     name: '',
-    basePrice: 0,
+    basePrice: undefined,
     description: '',
     quantity: 0,
     minQuantity: 0,
@@ -76,142 +76,161 @@ export function CreateProductForm() {
 
   return (
     <form
-      className="grid w-[28rem] p-6 shadow-lg bg-secondary-light rounded-md"
+      className="  p-6 shadow-lg bg-secondary-light rounded-md"
       onSubmit={onSubmit}
     >
-      <ImagenView src={img.link} alt="hola" />
-      <ImagenButton
-        msg="Selecione foto del producto"
-        handleImageChange={setImg}
-      />
-      <label htmlFor="name">Nombre:</label>
-      <input
-        id="name"
-        type="text"
-        className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
-        value={state.name}
-        onChange={handleChange}
-        name="name"
-        placeholder="Lapiz Faber-Castell HB negro"
-        minLength={2}
-        required
-      />
+      <div className="grid gap-x-5 grid-cols-3">
+        <div>
+          <ImagenView src={img.link} alt="hola" />
+          <ImagenButton
+            msg="Selecione foto del producto"
+            handleImageChange={setImg}
+          />
+          <div className="flex gap-x-1.5 items-center">
+            <label className="flex-none" htmlFor="name">
+              Nombre:
+            </label>
+            <input
+              id="name"
+              type="text"
+              className=" flex-1 my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
+              value={state.name}
+              onChange={handleChange}
+              name="name"
+              placeholder="Lapiz Faber-Castell HB negro"
+              minLength={2}
+              required
+            />
+          </div>
+        </div>
 
-      <label htmlFor="code">
-        Codigo(opcional):
-        <Question
-          className="ml-[1rem]"
-          msg="Es un codigo interno por si se quiere buscar mas rapido"
-        />
-      </label>
-      <input
-        id="code"
-        type="text"
-        className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
-        value={state.code}
-        onChange={handleChange}
-        name="code"
-        placeholder="Lap-01"
-      />
-      <label htmlFor="quantity">
-        Stock disponibles(opcional)
-        <Question
-          className="ml-[1rem]"
-          msg="Es la cantidad de elementos en disponibles, este numero es 0 no habra productos visibles para los clientes"
-        />
-      </label>
-      <input
-        id="quantity"
-        type="number"
-        className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
-        value={state.quantity}
-        onChange={handleChange}
-        name="quantity"
-        placeholder="100"
-      />
+        <div>
+          <div className="flex flex-col text-sm gap-y-1.5">
+            <label htmlFor="mark">Marca:</label>
+            <select
+              id="mark"
+              className="flex-grow pl-[0.25rem] h-[2rem] rounded-md"
+              value={state.mark}
+              onChange={handleChange}
+              name="mark"
+            >
+              {marks.map((mark) => (
+                <option key={`${mark.name}-${mark.id}`} value={mark.id}>
+                  {mark.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col my-[1rem] gap-y-1.5">
+            <div className="flex text-sm ">
+              <label htmlFor="mark">Estado:</label>
+              <Question
+                className="mx-[0.25rem] h-[1.2em] w-[1.2em] text-xs"
+                msg="En caso de estar desactivado el articulo no le apareca a los clientes."
+              />
+            </div>
+            <select
+              className="flex-grow text-sm pl-[0.25rem] h-[2rem] rounded-md"
+              onChange={handleChange}
+              value={state.enable}
+              name="enable"
+            >
+              <option value={0}>No Activo</option>
+              <option value={1}>Activo</option>
+            </select>
+          </div>
 
-      <label htmlFor="minQuantity">
-        Stock Minimo (opcional)
-        <Question
-          className="ml-[1rem]"
-          msg="Es la cantidad minima de elementos antes de pasar el producto a la lista de a ordenar"
-        />
-      </label>
-      <input
-        id="minQuantity"
-        type="number"
-        className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
-        value={state.minQuantity}
-        onChange={handleChange}
-        name="minQuantity"
-        placeholder="1"
-      />
+          <div className="flex flex-col my-[1rem] text-sm gap-y-1.5">
+            <label className="text-sm mr-[0.25rem]" htmlFor="price">
+              Precio Base:
+            </label>
+            <input
+              id="price"
+              name="basePrice"
+              step="0.01"
+              type="number"
+              className="h-[2rem] rounded-lg pl-[0.25rem] flex-grow"
+              value={state.basePrice}
+              onChange={handleChange}
+              placeholder="20.20"
+              min="1"
+              required
+            />
+          </div>
+          <div className="flex flex-col my-[1rem] gap-y-1.5">
+            <label className="flex" htmlFor="description">
+              Descripcion <span className="text-slate-700"> (opcional)</span>:
+              <Question
+                className="mx-[0.25rem] h-[1.2em] w-[1.2em] text-xs"
+                msg="Es una breve descripcion para que el cliente pueda saber un poco mas acerca del producto."
+              />
+            </label>
+            <input
+              id="description"
+              type="text"
+              className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
+              value={state.description}
+              onChange={handleChange}
+              name="description"
+              placeholder="Es un lapiz semi duro"
+            />
+          </div>
+        </div>
 
-      <label htmlFor="mark">Marca:</label>
-      <select
-        id="mark"
-        className="flex-grow pl-[0.25rem] h-[2rem] rounded-md"
-        value={state.mark}
-        onChange={handleChange}
-        name="mark"
-      >
-        {marks.map((mark) => (
-          <option key={`${mark.name}-${mark.id}`} value={mark.id}>
-            {mark.name}
-          </option>
-        ))}
-      </select>
+        <div>
+          <label htmlFor="code">
+            Codigo(opcional):
+            <Question
+              className="ml-[1rem]"
+              msg="Es un codigo interno por si se quiere buscar mas rapido"
+            />
+          </label>
+          <input
+            id="code"
+            type="text"
+            className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
+            value={state.code}
+            onChange={handleChange}
+            name="code"
+            placeholder="Lap-01"
+          />
+          <label htmlFor="quantity">
+            Stock disponibles(opcional)
+            <Question
+              className="ml-[1rem]"
+              msg="Es la cantidad de elementos en disponibles, este numero es 0 no habra productos visibles para los clientes"
+            />
+          </label>
+          <input
+            id="quantity"
+            type="number"
+            className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
+            value={state.quantity}
+            onChange={handleChange}
+            name="quantity"
+            placeholder="100"
+          />
 
-      <div className="flex items-center  my-[1rem] w-full">
-        <label htmlFor="mark">Estado:</label>
-        <select
-          className="flex-grow pl-[0.25rem] h-[2rem] rounded-md"
-          onChange={handleChange}
-          value={state.enable}
-          name="enable"
-        >
-          <option value={0}>No Activo</option>
-          <option value={1}>Activo</option>
-        </select>
-        <Question
-          className="ml-[1rem]"
-          msg="En caso de estar desactivado el articulo no le apareca a los clientes."
-        />
+          <label htmlFor="minQuantity">
+            Stock Minimo (opcional)
+            <Question
+              className="ml-[1rem]"
+              msg="Es la cantidad minima de elementos antes de pasar el producto a la lista de a ordenar"
+            />
+          </label>
+          <input
+            id="minQuantity"
+            type="number"
+            className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
+            value={state.minQuantity}
+            onChange={handleChange}
+            name="minQuantity"
+            placeholder="1"
+          />
+        </div>
       </div>
-
-      <label htmlFor="price">Precio Base:</label>
       <input
-        id="price"
-        name="basePrice"
-        step="0.01"
-        type="number"
-        className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
-        value={state.basePrice}
-        onChange={handleChange}
-        placeholder="20.20"
-        min="1"
-        required
-      />
-
-      <label className="flex" htmlFor="description">
-        Descripcion(opcional):
-        <Question
-          className="ml-[1rem]"
-          msg="Es una breve descripcion para que el cliente pueda saber un poco mas acerca del producto."
-        />
-      </label>
-      <input
-        id="description"
-        type="text"
-        className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
-        value={state.description}
-        onChange={handleChange}
-        name="description"
-        placeholder="Es un lapiz semi duro"
-      />
-
-      <input
-        className="bg-blue-400 m-auto px-8 py-2 rounded-xl cursor-pointer"
+        className="bg-blue-400 m-auto mt-[2rem] px-8 py-2 rounded-xl cursor-pointer"
         type="submit"
         value="Crear"
       />
@@ -219,22 +238,22 @@ export function CreateProductForm() {
   );
 }
 /*
-  name        String           @db.VarChar(255)
-  description String?          @db.MediumText
-  code        String?          @db.VarChar(255)
-  //photos      Json?            @db.Json
-  // photos      String[]            @db.MediumText
-  basePrice   Decimal          @db.Decimal(7, 2)
-  //prices      Price[] // Relación con precios
-  //priceRules  PriceRules[]
-  markId      Int?
-  mark        Mark?            @relation(fields: [markId], references: [id])
-  // categoryId  Int?
-  // category    Category?        @relation(fields: [categoryId], references: [id])
-  // variants    ProductVariant[] // Relación con variantes de producto
-  order       ProductOnOrder[]
+	name        String           @db.VarChar(255)
+	description String?          @db.MediumText
+	code        String?          @db.VarChar(255)
+	//photos      Json?            @db.Json
+	// photos      String[]            @db.MediumText
+	basePrice   Decimal          @db.Decimal(7, 2)
+	//prices      Price[] // Relación con precios
+	//priceRules  PriceRules[]
+	markId      Int?
+	mark        Mark?            @relation(fields: [markId], references: [id])
+	// categoryId  Int?
+	// category    Category?        @relation(fields: [categoryId], references: [id])
+	// variants    ProductVariant[] // Relación con variantes de producto
+	order       ProductOnOrder[]
 
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @default(now())
-  deletedAt DateTime?
+	createdAt DateTime  @default(now())
+	updateAt  DateTime  @default(now())
+	deletedAt DateTime?
 */

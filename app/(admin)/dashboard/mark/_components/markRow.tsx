@@ -7,25 +7,27 @@ import { MarkPrisma } from '@/app/lib/db/prisma';
 
 export function MarkRow({ id, name, icon, enable }: MarkRowProps) {
   const className = clsx('h-[5rem]', {
-    'text-slate-400': !enable,
-    'bg-slate-200': !enable,
+    //'text-slate-400': !enable,
+    'bg-red-300': !enable,
+    'bg-green-300': enable,
   });
   return (
     <Row className={className}>
-      <Td>{id}</Td>
-      <TdName name={name} id={id} />
+      <TdId id={id} />
+      <Td>{name}</Td>
       <TdIcon name={name} icon={icon} />
+      <Td className="text-center">{enable ? 'Activo' : 'No Activo'}</Td>
     </Row>
   );
 }
 
-function TdName({ name, id }: TdNameProps) {
+function TdId({ id }: { id: number }) {
   const className = clsx('hover:font-bold', 'text-xl', 'px-2');
   const href = `${DASHBOARD_PATH.MARK}/${id}`;
   return (
     <Td>
       <Link className={className} href={href}>
-        {name}
+        {id}
       </Link>
     </Td>
   );

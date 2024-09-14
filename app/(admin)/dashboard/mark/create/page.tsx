@@ -62,32 +62,45 @@ function MarkCreateForm({
     >
       <ImagenView src={img.link} alt="hola" />
       <ImagenButton msg="Selecione Icono" handleImageChange={setImg} />
-
-      <input
-        type="text"
-        className="my-[1rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
-        minLength={2}
-        value={formInfo.name}
-        onChange={handleChange}
-        name="name"
-        placeholder="Eq"
-        required
-      />
-
-      <div className="flex items-center flex-grow my-[1rem] w-full">
-        <select
-          className="flex-grow pl-[0.25rem] h-[2rem] rounded-md"
-          value={formInfo.enable}
+      <div>
+        <label htmlFor="name" className="text-sm">
+          Nombre:
+        </label>
+        <input
+          id="name"
+          type="text"
+          className="my-[0.5rem] w-full h-[2rem] rounded-lg pl-[0.5rem]"
+          minLength={2}
+          value={formInfo.name}
           onChange={handleChange}
-          name="enable"
-        >
-          <option value={1}>Activo</option>
-          <option value={0}>No Activo</option>
-        </select>
-        <Question
-          className="ml-[1rem]"
-          msg="En caso de no estar activa la marca no aparecera ningun producto relacionada con ella, ni esta como sugerencia"
+          name="name"
+          placeholder="Eq"
+          required
         />
+      </div>
+
+      <div>
+        <div className="flex">
+          <label htmlFor="name" className="text-sm">
+            Estado:
+          </label>
+          <Question
+            className="mx-[0.25rem] h-[1.2em] w-[1.2em] text-xs"
+            msg="En caso de no estar activa la marca no aparecera ningun producto relacionada con ella, ni esta como sugerencia"
+          />
+        </div>
+
+        <div className="flex items-center flex-grow my-[1rem] w-full">
+          <select
+            className="flex-grow pl-[0.25rem] h-[2rem] rounded-md"
+            value={formInfo.enable}
+            onChange={handleChange}
+            name="enable"
+          >
+            <option value={1}>Activo</option>
+            <option value={0}>No Activo</option>
+          </select>
+        </div>
       </div>
       <input
         className="bg-blue-400 m-auto px-8 py-2 rounded-xl cursor-pointer"
