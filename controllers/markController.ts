@@ -7,19 +7,28 @@ import {
   PageSearchBasic,
 } from '@/repositories/markRepository';
 import { PrismaClientValidationError } from '@prisma/client/runtime/library';
+import { GeneralController } from './mainController';
+import { Mark } from '@prisma/client';
+import { MarkPrisma } from '@/app/lib/db/prisma';
 
 @injectable()
-export class MarkController {
+export class MarkController extends GeneralController {
   constructor(
     @inject(TypesCompose.markRepo)
     private readonly markRepository: MarkRepository,
-  ) {}
+  ) {
+    super();
+  }
 
   async getAll() {
     return this.markRepository.getAll();
   }
 
   async save(formData: FormData) {
+    if (!(await this.userPermissionVerifier.isAdmin())) {
+      return { error: 'no autorizado', status: '500' };
+    }
+
     const file = formData.get('icon') as File;
     try {
       const iconPath = await handlerImgMark.saveFile(file);
@@ -54,7 +63,14 @@ export class MarkController {
     return { status: '200' };
   }
 
-  getMarkByPage({ page, pageSize }: PageSearchBasic) {
+  async getMarkByPage({ page, pageSize }: PageSearchBasic) {
     return this.markRepository.getMarkByPage({ page, pageSize });
+  }
+
+  async getById(mark: Pick<MarkPrisma, 'id'>) {
+    if (!Number.isSafeInteger(mark.id)) {
+      return null;
+    }
+    return this.markRepository.getById(mark.id);
   }
 }
