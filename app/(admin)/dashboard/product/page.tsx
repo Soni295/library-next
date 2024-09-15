@@ -1,47 +1,13 @@
-'use client';
+//'use client';
 
-import axios from 'axios';
-import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState } from 'react';
-import { DASHBOARD_PATH, SERVER_PATH } from '@/app/lib/paths';
+import { DASHBOARD_PATH } from '@/app/lib/paths';
 import { Row, TBody, THead, Table, Td, Th } from '@/app/ui/tables';
 import { type ProductPage } from '@/repositories';
 import { Question } from '@/app/ui/question';
 import { Pagination } from '@/app/ui/pagination';
 import { NotFound } from '@/app/ui/notFound';
-
-function useProdcutPage() {
-  const [data, setData] = useState<ProductPage>({
-    data: [],
-    page: 1,
-    totalPages: 1,
-    pageSize: 10,
-    totalItems: 1,
-  });
-
-  const searchParams = useSearchParams();
-  const currentPage = searchParams.get('page') || '1';
-
-  useEffect(() => {
-    async function fetchInfo() {
-      try {
-        const url = new URLSearchParams('');
-        url.set('page', currentPage);
-        url.set('pageSize', String(data.pageSize));
-        const urlSearch = url.toString();
-        const res = await axios.get<ProductPage>(
-          `${SERVER_PATH.PRODUCT}?${urlSearch}`,
-        );
-        setData(res.data);
-      } catch (err) {
-        console.log(err);
-      }
-    }
-    fetchInfo();
-  }, [currentPage]);
-
-  return [data];
-}
+import { SearchInput } from './_components/SearchInput';
+import { productCtrl } from '@/app/lib/compose/inversify';
 
 function ProductsTableEmpty() {
   return (
@@ -53,9 +19,9 @@ function ProductsTableEmpty() {
   );
 }
 
-async function ProductTable() {
-  const [data] = useProdcutPage();
-  if (data.data.length === 0) return <ProductsTableEmpty />;
+function ProductTable({ data, totalPages }: ProductPage) {
+  if (data.length === 0) return <ProductsTableEmpty />;
+
   return (
     <>
       <Table>
@@ -69,13 +35,13 @@ async function ProductTable() {
           <Th className="flex items-center">
             <p className="pr-[0.25rem]">Cantidad minima</p>{' '}
             <Question
-              className="line"
+              className="mx-[0.25rem] h-[0.84rem] w-[0.84rem] text-xs"
               msg="si el stock es menor a la cantidad minima automaticamente pasa a la lista de pedidos"
             />
           </Th>
         </THead>
         <TBody>
-          {data.data.map((p) => (
+          {data.map((p) => (
             <Row key={'product' + p.id}>
               <Td className="text-right">{p.id}</Td>
               <Td>{p.name}</Td>
@@ -92,21 +58,31 @@ async function ProductTable() {
           ))}
         </TBody>
       </Table>
-      <Pagination totalPages={data.totalPages} />
+      <Pagination totalPages={totalPages} />
     </>
   );
 }
 
-function LoadingInfo() {
-  return <div>Cargando...</div>;
+interface SearchParams {
+  searchParams: { [key: string]: string | string[] | undefined };
 }
 
-export default function ProductPage() {
+export default async function ProductPage({ searchParams }: SearchParams) {
+  const page = searchParams.page || '1';
+  const pageSize = searchParams.pageSize || '10';
+  const name = searchParams.name || '';
+
+  console.log({ page, pageSize, name });
+  const data = await productCtrl.getProductsByFilter({
+    page: Number(page),
+    pageSize: Number(pageSize),
+    text: name as string,
+  });
+
   return (
-    <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
-      <Suspense fallback={<LoadingInfo />}>
-        <ProductTable />
-      </Suspense>
+    <div className="h-[calc(100vh-7rem)] flex flex-col justify-center items-center">
+      <SearchInput nameDefault={name as string} />
+      <ProductTable {...data} />
     </div>
   );
 }

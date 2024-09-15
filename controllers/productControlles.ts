@@ -6,7 +6,7 @@ import { GeneralController } from './mainController';
 import { handlerImgProduct } from '@/app/lib/utils/handleImage';
 import { PrismaClientValidationError } from '@prisma/client/runtime/library';
 import { TypesCompose } from '@/app/lib/compose';
-import { PageSearchFilter } from '@/repositories';
+import { PageSearchFilter, SearchFilterProductStock } from '@/repositories';
 
 export interface IProduct extends Omit<Product, 'photos'> {
   photos: string[];
@@ -101,7 +101,7 @@ export class ProductController extends GeneralController {
 		});
 	}
 	*/
-  async getProductsByFilter(pageSearchFilter: PageSearchFilter) {
+  async getProductsByFilter(pageSearchFilter: SearchFilterProductStock) {
     return this.productRepository.getProductsByFilter(pageSearchFilter);
   }
 }
