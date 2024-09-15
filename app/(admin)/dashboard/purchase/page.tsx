@@ -1,5 +1,3 @@
-import { Paleta } from '@/app/test/index';
-
 export default function PurchasePage() {
-  return <Paleta />;
+  return <div>Ordenes de compra</div>;
 }
