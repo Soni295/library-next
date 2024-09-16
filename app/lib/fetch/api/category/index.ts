@@ -31,7 +31,6 @@ export const categoryService = {
   },
 
   async updateCategory(category: CategoryUpdate): Promise<ResCategory> {
-    console.log('hola');
     const data = await fetch(ENDPOINTS.CATEGORY, {
       method: 'PUT',
       headers,

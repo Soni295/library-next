@@ -22,7 +22,7 @@ export default async function Page({ params: { markId } }: MakePageProps) {
       />
     );
   }
-  console.log(data);
+
   return (
     <div className="flex flex-col">
       <h2>{data.name}</h2>
@@ -34,7 +34,6 @@ export default async function Page({ params: { markId } }: MakePageProps) {
     if (data == null)
       );
 
-    console.log(data);
     return (
       <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
         <form

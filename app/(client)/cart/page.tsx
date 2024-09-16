@@ -7,7 +7,6 @@ export default async function CartPage() {
   const user = await getSession();
   if (!user) redirect(PATH.CLIENT.HOME);
   const a = await orderCtrl.getSelectionOrderByUserId({ id: user.id });
-  console.log({ a });
   //const cart = await OrderRepository.getLastOrderByUserId(user);
   //<Cart items={info.items} total={info.total} />
   return <main className="flex">Cart Page</main>;

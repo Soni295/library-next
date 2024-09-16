@@ -28,7 +28,7 @@ export class OrderController {
     if (!order) {
       return this.orderRepository.createOrderByUserId({ id });
     }
-    console.log('hola', order);
+
     if (!Array.isArray(order.orderItems)) {
       return order;
     }

@@ -67,7 +67,6 @@ export class ProductController extends GeneralController {
   }
 
   async getById(id: number) {
-    console.log(this);
     return this.productRepository.getById({ id });
   }
   /*

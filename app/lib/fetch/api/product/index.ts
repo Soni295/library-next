@@ -1,3 +1,4 @@
+/*
 import { ENDPOINTS } from '../config';
 
 const headers = { 'Content-Type': 'application/json' };
@@ -36,5 +37,6 @@ export const productService = {
     })
     return await data.json()
   }
-  */
-};
+}
+
+*/

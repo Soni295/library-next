@@ -24,8 +24,6 @@ export function CreateProductForm() {
     }
     a();
   }, []);
-  // const all = await markController.getAll()
-  // console.log(all)
 
   const handleChange = (
     e: ChangeEvent<HTMLSelectElement | HTMLInputElement>,
