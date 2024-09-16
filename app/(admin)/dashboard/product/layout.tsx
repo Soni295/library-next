@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
 import { Props } from '@/app/lib/definitions';
 import { CreateButton } from '../_components/createButton';
 import { DashboardTitle } from '../_components/dashboardTitle';
 import { DASHBOARD_PATH } from '@/app/lib/paths';
+import { SpinnerMain } from '@/app/ui/spinner';
 
 export default async function Layout({ children }: Props) {
   return (
@@ -12,7 +14,7 @@ export default async function Layout({ children }: Props) {
           href={DASHBOARD_PATH.PRODUCTS_CREATE}
         />
       </DashboardTitle>
-      {children}
+      <Suspense fallback={<SpinnerMain />}>{children}</Suspense>
     </div>
   );
 }

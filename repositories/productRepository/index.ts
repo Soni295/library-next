@@ -1,8 +1,8 @@
 import { injectable } from 'inversify';
-import prisma from '@/app/lib/db/prisma';
+import prisma, { MarkPrisma } from '@/app/lib/db/prisma';
 import { ProductCreateInput } from '@/app/lib/definitions/product';
 import { ProductPrisma } from '@/app/lib/db/prisma';
-import { PageSearchFilter, ProductPage } from '..';
+import { PageSearchFilter, ProductPage, SearchFilterProductStock } from '..';
 import { Maybe } from '@/app/lib/definitions/general';
 
 export type MaybeProduct = Maybe<ProductPrisma>;
@@ -46,16 +46,23 @@ export class ProductRepository {
   async getProductsByFilter({
     page,
     pageSize = 20,
-  }: PageSearchFilter): Promise<ProductPage> {
+    text = '',
+  }: SearchFilterProductStock): Promise<ProductPage> {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
 
+    const where = {
+      OR: [{ name: { contains: text } }],
+    };
+
     const data = await prisma.product.findMany({
+      where,
       skip,
       take,
       include: { mark: true },
     });
-    const totalItems = await prisma.product.count();
+
+    const totalItems = await prisma.product.count({ where });
     const totalPages = Math.ceil(totalItems / pageSize);
 
     return {

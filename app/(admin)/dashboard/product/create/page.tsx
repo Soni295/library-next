@@ -88,7 +88,7 @@ export function CreateProductForm() {
       'Es la cantidad minima de elementos antes de pasar el producto a la lista de a ordenar.',
   };
 
-  const fieldStyle = 'flex-1 py-[0.1em]  rounded-lg pl-[0.5rem] text-sm';
+  const fieldStyle = 'flex-1 py-[0.1em] rounded-lg pl-[0.5rem] text-sm';
 
   return (
     <form
