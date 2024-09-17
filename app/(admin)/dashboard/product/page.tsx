@@ -1,5 +1,3 @@
-//'use client';
-
 import { DASHBOARD_PATH } from '@/app/lib/paths';
 import { Row, TBody, THead, Table, Td, Th } from '@/app/ui/tables';
 import { type ProductPage } from '@/repositories';
@@ -8,6 +6,7 @@ import { Pagination } from '@/app/ui/pagination';
 import { NotFound } from '@/app/ui/notFound';
 import { SearchInput } from './_components/SearchInput';
 import { productCtrl } from '@/app/lib/compose/inversify';
+import Link from 'next/link';
 
 function ProductsTableEmpty() {
   return (
@@ -16,6 +15,26 @@ function ProductsTableEmpty() {
       msg="No hay productos"
       href={DASHBOARD_PATH.PRODUCTS_CREATE}
     />
+  );
+}
+
+function ProductField({ info }: { info: ProductPage['data'][0] }) {
+  return (
+    <Row key={'product' + info.id}>
+      <Td className="text-right">
+        <Link href={`${DASHBOARD_PATH.PRODUCT}/${info.id}`}>{info.id}</Link>
+      </Td>
+      <Td>{info.name}</Td>
+      <Td>{info.mark?.name ? info.mark.name : 'no tiene'}</Td>
+      {
+        <Td className={info.enable ? 'bg-green-300' : 'bg-red-300'}>
+          {info.enable ? 'Disponible' : 'No disponible'}
+        </Td>
+      }
+      <Td className="text-right">{Number(info.basePrice).toFixed(2)}</Td>
+      <Td className="text-center">{Number(info.quantity)}</Td>
+      <Td className="text-center">{Number(info.minQuantity)}</Td>
+    </Row>
   );
 }
 
@@ -42,19 +61,7 @@ function ProductTable({ data, totalPages }: ProductPage) {
         </THead>
         <TBody>
           {data.map((p) => (
-            <Row key={'product' + p.id}>
-              <Td className="text-right">{p.id}</Td>
-              <Td>{p.name}</Td>
-              <Td>{p.mark?.name ? p.mark.name : 'no tiene'}</Td>
-              {
-                <Td className={p.enable ? 'bg-green-300' : 'bg-red-300'}>
-                  {p.enable ? 'Disponible' : 'No disponible'}
-                </Td>
-              }
-              <Td className="text-right">{Number(p.basePrice).toFixed(2)}</Td>
-              <Td className="text-center">{Number(p.quantity)}</Td>
-              <Td className="text-center">{Number(p.minQuantity)}</Td>
-            </Row>
+            <ProductField info={p} />
           ))}
         </TBody>
       </Table>
@@ -72,7 +79,6 @@ export default async function ProductPage({ searchParams }: SearchParams) {
   const pageSize = searchParams.pageSize || '10';
   const name = searchParams.name || '';
 
-  console.log({ page, pageSize, name });
   const data = await productCtrl.getProductsByFilter({
     page: Number(page),
     pageSize: Number(pageSize),
