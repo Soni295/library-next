@@ -12,6 +12,7 @@ const initialState: imgState = {
 };
 
 export function useImg(link: string = '') {
+  console.log({ link });
   const [img, setImg] = useState<imgState>({
     link: link,
     file: null,

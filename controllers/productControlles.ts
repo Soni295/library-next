@@ -1,7 +1,10 @@
 import { inject, injectable } from 'inversify';
 import { type ProductRepository } from '@/repositories/productRepository';
 import { Product } from '@prisma/client';
-import { ProductCreateInputSchema } from '@/app/lib/definitions/product';
+import {
+  ProductCreateInputSchema,
+  ProductUpdateInputSchema,
+} from '@/app/lib/definitions/product';
 import { GeneralController } from './mainController';
 import { handlerImgProduct } from '@/app/lib/utils/handleImage';
 import { PrismaClientValidationError } from '@prisma/client/runtime/library';
@@ -19,6 +22,52 @@ export class ProductController extends GeneralController {
     private readonly productRepository: ProductRepository,
   ) {
     super();
+  }
+
+  async update(formData: FormData) {
+    this.userPermissionVerifier.isAdmin(); // cambiar luego
+    try {
+      const file = formData.get('photo') as File;
+      const photo = await handlerImgProduct.saveFile(file);
+
+      const mark = formData.get('mark');
+      const validatedProduct = ProductUpdateInputSchema.safeParse({
+        id: Number(formData.get('id')),
+        name: formData.get('name'),
+        description: formData.get('description'),
+        code: formData.get('code'),
+        basePrice: Number(formData.get('basePrice')),
+        markId: mark === 'No asignada' ? null : Number(mark),
+        enable: formData.get('enable') === '1',
+        photo: photo,
+        quantity: Number(formData.get('quantity')),
+        minQuantity: Number(formData.get('minQuantity')),
+      });
+
+      if (!validatedProduct.success) {
+        const err = validatedProduct.error.issues
+          .map((err) => err.message)
+          .join('<br>');
+        return {
+          error: err,
+          status: '500',
+        };
+      }
+      await this.productRepository.save(validatedProduct.data);
+    } catch (err) {
+      if (err instanceof PrismaClientValidationError) {
+        console.log('alto error PrismaClientValidationError', err.message);
+      }
+      console.log(err);
+
+      if (err instanceof Error) {
+        return {
+          status: '500',
+          error: err.message,
+        };
+      }
+    }
+    return { status: '200' };
   }
 
   async save(formData: FormData) {

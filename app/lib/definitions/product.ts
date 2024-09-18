@@ -1,5 +1,6 @@
 import z from 'zod';
 
+const id = z.number();
 const name = z
   .string({ message: 'El nombre del producto es requerido' })
   .min(2, { message: 'El nombre del producto debe tener al menos 2 letras' });
@@ -27,7 +28,21 @@ export const ProductCreateInputSchema = z.object({
   photo,
 });
 
+export const ProductUpdateInputSchema = z.object({
+  id,
+  name: name.optional(),
+  description: description.optional(),
+  basePrice: basePrice.optional(),
+  quantity: quantity.optional(),
+  minQuantity: minQuantity.optional(),
+  code: code.optional(),
+  enable: enable.optional(),
+  markId: markId.optional(),
+  photo: photo.optional(),
+});
+
 export type ProductCreateInput = z.infer<typeof ProductCreateInputSchema>;
+export type ProductUpdateInput = z.infer<typeof ProductUpdateInputSchema>;
 
 /*
 (alias) type ProductPrisma = {

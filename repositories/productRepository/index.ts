@@ -1,6 +1,9 @@
 import { injectable } from 'inversify';
 import prisma, { MarkPrisma } from '@/app/lib/db/prisma';
-import { ProductCreateInput } from '@/app/lib/definitions/product';
+import {
+  ProductCreateInput,
+  ProductUpdateInput,
+} from '@/app/lib/definitions/product';
 import { ProductPrisma } from '@/app/lib/db/prisma';
 import { PageSearchFilter, ProductPage, SearchFilterProductStock } from '..';
 import { Maybe } from '@/app/lib/definitions/general';
@@ -28,6 +31,33 @@ export class ProductRepository {
         ...mark,
       },
     });
+  }
+
+  async update(product: ProductUpdateInput): Promise<MaybeProduct> {
+    const productDb = await prisma.product.findFirst({
+      where: { id: product.id },
+    });
+
+    return;
+
+    /*
+    const mark = product.markId
+      ? { mark: { connect: { id: product.markId } } }
+      : {};
+    return await prisma.product.create({
+      data: {
+        name: product.name,
+        quantity: product.quantity,
+        minQuantity: product.minQuantity,
+        description: product.description,
+        code: product.code,
+        basePrice: product.basePrice,
+        enable: product.enable,
+        photo: product.photo,
+        ...mark,
+      },
+    });
+    */
   }
 
   async getManyById(pIds: ProductId[]): Promise<MaybeProducts> {

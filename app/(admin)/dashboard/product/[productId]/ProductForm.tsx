@@ -10,6 +10,7 @@ import { Props, SubmitEvent } from '@/app/lib/definitions';
 import { useImg } from '@/app/lib/customHooks/useImage';
 import { ImagenButton, ImagenView } from '@/app/ui/dashboard/ImageForm';
 import { toastErr, toastSuccess } from '@/app/ui/toast';
+import { createProductAction, updateProductAction } from './action';
 
 type ChangeEv = ChangeEvent<HTMLSelectElement | HTMLInputElement>;
 
@@ -25,16 +26,20 @@ interface IProductForm {
 }
 
 interface ProductFormProps {
-  productInfo?: {
-    name: string;
-    basePrice?: number;
-    description: string;
-    quantity: number;
-    minQuantity: number;
-    code: string;
-    mark: string;
-    enable: string;
-  };
+  productInfo?: IproductInfo;
+  productId?: number;
+  imgInfo?: string;
+  onSubmit: (form: FormData) => void;
+}
+interface IproductInfo {
+  name: string;
+  basePrice?: number;
+  description: string;
+  quantity: number;
+  minQuantity: number;
+  code: string;
+  mark: string;
+  enable: string;
 }
 
 const defaultValues = {
@@ -48,11 +53,14 @@ const defaultValues = {
   enable: '0',
 };
 
-export function ProductForm({ productInfo = defaultValues }: ProductFormProps) {
-  const [img, setImg, reset] = useImg();
+export function ProductForm({
+  productInfo = defaultValues,
+  productId,
+  imgInfo,
+}: ProductFormProps) {
+  const [img, setImg, reset] = useImg(imgInfo);
 
-  const [state, setState] =
-    useState<ProductFormProps['productInfo']>(productInfo);
+  const [state, setState] = useState<IproductInfo>(productInfo);
   const [marks, setMarks] = useState<MarksForSelect>([]);
 
   useEffect(() => {
@@ -70,6 +78,7 @@ export function ProductForm({ productInfo = defaultValues }: ProductFormProps) {
   const onSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     const form = new FormData();
+
     form.set('name', state.name.trim());
     form.set('basePrice', String(state.basePrice));
     form.set('description', state.description.trim());
@@ -82,17 +91,19 @@ export function ProductForm({ productInfo = defaultValues }: ProductFormProps) {
     if (img.file) {
       form.append('photo', img.file);
     }
-    /*
-    const res = await createProductAction(form);
 
-    if (res.status === '200') {
-      toastSuccess('La marca se creo exitosamente.');
+    if (!productId) {
+      const res = await createProductAction(form);
+
+      if (res.status === '200') toastSuccess('La marca se creo exitosamente.');
+      if (res.status === '500') if (res.error) toastErr(res.error);
+
       return;
     }
-    if (res.status === '500') {
-      if (res.error) toastErr(res.error);
-    }
-    */
+    form.set('id', String(productId));
+
+    const res = await updateProductAction(form);
+    console.log({ res });
   };
 
   const questions = {
@@ -117,7 +128,12 @@ export function ProductForm({ productInfo = defaultValues }: ProductFormProps) {
       onSubmit={onSubmit}
     >
       <div className="grid gap-x-5 grid-cols-3">
-        <div className="justify-center">
+        <div className="grid justify-center align-center">
+          {productId && (
+            <h2 className="text-center text-2xl font-extrabold">
+              ID:{productId}
+            </h2>
+          )}
           <ImagenView src={img.link} alt="hola" />
           <ImagenButton msg="Selecione foto" handleImageChange={setImg} />
         </div>
@@ -278,7 +294,7 @@ function Field({
         </label>
         {question && (
           <Question
-            className="mx-[0.25rem] h-[0.85rem] w-[0.85rem] text-xs"
+            className="mx-[0.25rem] h-[0.8rem] w-[0.8rem] text-xs"
             msg={question}
           />
         )}

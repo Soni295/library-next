@@ -22,9 +22,14 @@ export default async function Page({
       />
     );
   }
+  const onSubmit = (form: FormData) => {
+    console.log(form);
+  };
 
   return (
     <ProductForm
+      productId={id}
+      imgInfo={data.photo}
       productInfo={{
         name: data.name,
         basePrice: data.basePrice,
