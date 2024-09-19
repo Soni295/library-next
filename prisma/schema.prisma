@@ -42,20 +42,38 @@ model User {
 //   Done
 // }
 
-model Category {
-  id Int @id @default(autoincrement())
+model ProductTag {
+  productId Int
+  product   Product @relation(fields: [productId], references: [id])
 
-  name String //@db.VarChar(255)
-  // products Product[]
+  tagId Int
+  tag   Tag @relation(fields: [tagId], references: [id])
 
-  categorySuperiorId Int?
-  categorySuperior   Category?  @relation("MainCategorySubCategories", fields: [categorySuperiorId], references: [id])
-  SubCategory        Category[] @relation("MainCategorySubCategories")
-
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @default(now())
-  deletedAt DateTime?
+  @@id([productId, tagId])
 }
+
+model Tag {
+  id   Int    @id @default(autoincrement())
+  kind String
+  name String
+
+  productTag ProductTag[]
+}
+
+// model Category {
+//   id Int @id @default(autoincrement())
+// 
+//   name String //@db.VarChar(255)
+//   // products Product[]
+// 
+//   categorySuperiorId Int?
+//   categorySuperior   Category?  @relation("MainCategorySubCategories", fields: [categorySuperiorId], references: [id])
+//   SubCategory        Category[] @relation("MainCategorySubCategories")
+// 
+//   createdAt DateTime  @default(now())
+//   updateAt  DateTime  @default(now())
+//   deletedAt DateTime?
+// }
 
 model Mark {
   id   Int    @id @default(autoincrement())
@@ -71,29 +89,29 @@ model Mark {
 }
 
 model Product {
-  id          Int         @id @default(autoincrement())
+  id          Int          @id @default(autoincrement())
   name        String // @db.VarChar(255)
   description String? // @db.MediumText
   code        String? // @db.VarChar(255)
   photo       String // @db.VarChar(255)
   basePrice   Decimal //@db.Decimal(7, 2)
-  enable      Boolean     @default(false)
-  quantity    Int         @default(0)
-  minQuantity Int         @default(0)
+  enable      Boolean      @default(false)
+  quantity    Int          @default(0)
+  minQuantity Int          @default(0)
   markId      Int?
-  mark        Mark?       @relation(fields: [markId], references: [id])
+  mark        Mark?        @relation(fields: [markId], references: [id])
   //prices      Price[] // Relación con precios
   //priceRules  PriceRules[]
   // categoryId  Int?
   // category    Category?        @relation(fields: [categoryId], references: [id])
   // variants    ProductVariant[] // Relación con variantes de producto
   orderItems  OrderItem[]
+  productTag  ProductTag[]
   //order       ProductOnOrder[]
 
-  createdAt      DateTime         @default(now())
-  updateAt       DateTime         @default(now())
-  deletedAt      DateTime?
-  ProductOnOrder ProductOnOrder[]
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @default(now())
+  deletedAt DateTime?
 }
 
 // model Formula {
@@ -114,26 +132,25 @@ model Product {
 //   formula Formula?
 // }
 
-model ProductOnOrder {
-  productId Int
-  product   Product @relation(fields: [productId], references: [id])
-
-  orderId Int
-  order   Order @relation(fields: [orderId], references: [id])
-
-  @@id([productId, orderId])
-}
+// model ProductOnOrder {
+//   productId Int
+//   product   Product @relation(fields: [productId], references: [id])
+// 
+//   orderId Int
+//   order   Order @relation(fields: [orderId], references: [id])
+// 
+//   @@id([productId, orderId])
+// }
 
 model OrderItem {
-  id Int @id @default(autoincrement())
+  id       Int @id @default(autoincrement())
+  quantity Int
 
   orderId Int
   order   Order @relation(fields: [orderId], references: [id])
 
   productId Int
   product   Product @relation(fields: [productId], references: [id])
-
-  quantity Int
 
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -148,38 +165,8 @@ model Order {
   status     String      @default("Selection")
   orderItems OrderItem[]
 
-  createdAt      DateTime         @default(now())
-  updateAt       DateTime         @default(now())
-  deletedAt      DateTime?
-  ProductOnOrder ProductOnOrder[]
+  createdAt DateTime  @default(now())
+  updateAt  DateTime  @default(now())
+  deletedAt DateTime?
+  //ProductOnOrder ProductOnOrder[]
 }
-
-//
-// model ProductVariant {
-//   id               Int              @id @default(autoincrement())
-//   name             String           @unique @db.VarChar(255)
-//   code             String?          @db.VarChar(255)
-//   photos           Json?            @db.Json
-//   prices           Price[]          // Relación con precios
-//   inventoryQuantity Int             @default(0)
-//   productId        Int
-//   product          Product?         @relation(fields: [productId], references: [id])
-//   createdAt        DateTime         @default(now())
-//   updatedAt        DateTime         @updatedAt
-//   deletedAt        DateTime?
-// }
-
-//
-//
-// model ItemValue {
-//     id Int @id @default(autoincrement())
-//     name String @db.VarChar(255)
-//     price Decimal @db.Decimal(7, 2)
-//
-//     // productID Int
-//     // product Product? @relation(fields: [productID], references: [id])
-//
-//     createdAt DateTime @default(now())
-//     updateAt DateTime @default(now())
-// }
-//

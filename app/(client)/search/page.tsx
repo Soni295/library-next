@@ -1,22 +1,11 @@
-'use client';
+import { productCtrl } from '@/app/lib/compose/inversify';
+import { CardConteiner } from '../_components/CardContainer';
+import { SearchParams } from '@/app/lib/definitions/SearchParams';
 
-import { SERVER_PATH } from '@/app/lib/paths';
-import { useSearchParams } from 'next/navigation';
-
-export async function loadSearchClientQuery(query: string) {
-  try {
-    const data = await fetch(`${SERVER_PATH.SEARCH_CLIENT}?q=${query}`);
-    const info = await data.json();
-    return data;
-  } catch (err) {
-    console.log(err);
-  }
-}
-
-export default async function Search() {
-  const searchParams = useSearchParams();
-  const a = searchParams.get('q') as string;
-  const aaa = await loadSearchClientQuery(a);
-
-  return <div>{a}</div>;
+export default async function Search(searchParams: SearchParams) {
+  const query = (searchParams.searchParams['q'] as string) || '';
+  const productPage = await productCtrl.getProductsByFilterForClient({
+    text: query,
+  });
+  return <CardConteiner elements={productPage.data} />;
 }

@@ -1,48 +1,27 @@
-'use client';
-import { useState } from 'react';
-import { Card, CardProps } from './Card';
+import { Card, ClientProduct } from './Card';
 
-const mock: CardProps[] = [
-  {
-    id: '30',
-    price: 100,
-    saleType: 'venta por unidad',
-    name: 'Marcadores maravilla',
-    img: 'https://jit.com.ar/wp-content/uploads/2023/02/Lapicera-simball-dolche-Azul-4-1.jpg',
-  },
-  {
-    id: '10',
-    price: 200,
-    saleType: 'venta por docena',
-    name: 'Lapicera realmente lapicera',
-    img: 'https://jit.com.ar/wp-content/uploads/2023/02/Lapicera-simball-dolche-Azul-4-1.jpg',
-  },
-  {
-    id: '13',
-    price: 200,
-    saleType: 'venta por docena',
-    name: 'Lapicera realmente lapicera',
-    img: 'https://jit.com.ar/wp-content/uploads/2023/02/Lapicera-simball-dolche-Azul-4-1.jpg',
-  },
-  {
-    id: '15',
-    price: 200,
-    saleType: 'venta por docena',
-    name: 'Lapicera realmente lapicera',
-    img: 'https://jit.com.ar/wp-content/uploads/2023/02/Lapicera-simball-dolche-Azul-4-1.jpg',
-  },
-];
+export function CardConteiner({ elements }: CardContainerProps) {
+  if (!elements || elements.length === 0) return <ProductsNotFound />;
 
-export function CardContainer() {
-  const [cards, setCards] = useState(mock);
-  const style = {
-    gridTemplateColumns: 'repeat(auto-fill, minmax(15rem, 1fr))',
-  };
   return (
-    <div className="grid gap-4 m-10 mt-8 md:mt-30" style={style}>
-      {cards.map((card) => (
-        <Card {...card} />
+    <div className="grid gap-4 mt-8 justify-items-center grid-cols-[repeat(auto-fill,minmax(18rem,1fr))]">
+      {elements.map((element) => (
+        <Card key={element.id} {...element} />
       ))}
     </div>
   );
+}
+
+function ProductsNotFound() {
+  return (
+    <div className="h-full w-full mt-20 md:text-5xl text-xl flex self-center justify-center">
+      <p className="text-center text-inactive-light">
+        No hay productos disponibles
+      </p>
+    </div>
+  );
+}
+
+interface CardContainerProps {
+  elements: ClientProduct[] | null;
 }

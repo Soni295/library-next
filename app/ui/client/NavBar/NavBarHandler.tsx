@@ -7,7 +7,6 @@ import {
   NavbarCartLinkIcon,
   SignInLink,
 } from './Links';
-import { NavbarDropdownMobile } from './SideBarMobile';
 import { NavbarBtnBurger, NavbarBtnLogout } from './Buttons';
 import { useNavbarContext } from './navbarContext';
 

@@ -41,23 +41,23 @@ export class ProductRepository {
     return;
 
     /*
-    const mark = product.markId
-      ? { mark: { connect: { id: product.markId } } }
-      : {};
-    return await prisma.product.create({
-      data: {
-        name: product.name,
-        quantity: product.quantity,
-        minQuantity: product.minQuantity,
-        description: product.description,
-        code: product.code,
-        basePrice: product.basePrice,
-        enable: product.enable,
-        photo: product.photo,
-        ...mark,
-      },
-    });
-    */
+		const mark = product.markId
+			? { mark: { connect: { id: product.markId } } }
+			: {};
+		return await prisma.product.create({
+			data: {
+				name: product.name,
+				quantity: product.quantity,
+				minQuantity: product.minQuantity,
+				description: product.description,
+				code: product.code,
+				basePrice: product.basePrice,
+				enable: product.enable,
+				photo: product.photo,
+				...mark,
+			},
+		});
+		*/
   }
 
   async getManyById(pIds: ProductId[]): Promise<MaybeProducts> {
@@ -74,7 +74,7 @@ export class ProductRepository {
   }
 
   async getProductsByFilter({
-    page,
+    page = 1,
     pageSize = 20,
     text = '',
   }: SearchFilterProductStock): Promise<ProductPage> {

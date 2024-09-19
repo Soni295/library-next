@@ -1,7 +1,7 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 import { CLIENT_PATH } from '@/app/lib/paths';
@@ -14,7 +14,11 @@ export function NavbarSearch() {
 
   const onSubmit = (e: genericEvent) => {
     e.preventDefault();
-    router.push(`${CLIENT_PATH.SEARCH}?q=${search}`);
+
+    const params = new URLSearchParams('');
+    params.set('q', search);
+
+    router.push(`${CLIENT_PATH.SEARCH}/?${params.toString()}`);
   };
 
   return (

@@ -12,7 +12,7 @@ export type MarkPage = Page<MarkPrisma>;
 export type ProductPage = Page<ProductPrisma & { mark: MarkPrisma | null }>;
 
 export interface PageSearchBasic {
-  page: number;
+  page?: number;
   pageSize?: number;
 }
 
