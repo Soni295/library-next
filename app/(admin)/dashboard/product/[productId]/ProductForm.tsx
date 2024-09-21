@@ -3,27 +3,15 @@
 import axios from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { SERVER_PATH } from '@/app/lib/paths';
-import { Question } from '@/app/ui/question';
 import { MarksForSelect } from '@/repositories/markRepository';
-import { Props, SubmitEvent } from '@/app/lib/definitions';
-//import { createProductAction } from './action';
+import { SubmitEvent } from '@/app/lib/definitions';
 import { useImg } from '@/app/lib/customHooks/useImage';
 import { ImagenButton, ImagenView } from '@/app/ui/dashboard/ImageForm';
 import { toastErr, toastSuccess } from '@/app/ui/toast';
 import { createProductAction, updateProductAction } from './action';
+import { Field } from '@/app/ui/form/Field';
 
 type ChangeEv = ChangeEvent<HTMLSelectElement | HTMLInputElement>;
-
-interface IProductForm {
-  name: string;
-  basePrice?: number;
-  description: string;
-  quantity: number;
-  minQuantity: number;
-  code: string;
-  mark: string;
-  enable: string;
-}
 
 interface ProductFormProps {
   productInfo?: IproductInfo;
@@ -269,37 +257,5 @@ export function ProductForm({
         value="Crear"
       />
     </form>
-  );
-}
-interface fieldProps extends Props {
-  label: string;
-  id: string;
-  question?: string;
-  optional?: boolean;
-}
-
-function Field({
-  optional = false,
-  label,
-  children,
-  id,
-  question,
-}: fieldProps) {
-  return (
-    <div className="flex flex-col gap-y-[0.3rem] py-[0.5rem]">
-      <div className="flex text-sm">
-        <label className="ml-[0.2rem]" htmlFor={id}>
-          {label}
-          {optional && <span className="text-slate-700"> (opcional)</span>}:
-        </label>
-        {question && (
-          <Question
-            className="mx-[0.25rem] h-[0.8rem] w-[0.8rem] text-xs"
-            msg={question}
-          />
-        )}
-      </div>
-      {children}
-    </div>
   );
 }

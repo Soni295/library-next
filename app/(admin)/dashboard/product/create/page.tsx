@@ -3,13 +3,14 @@
 import axios from 'axios';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { SERVER_PATH } from '@/app/lib/paths';
-import { Question } from '@/app/ui/question';
 import { MarksForSelect } from '@/repositories/markRepository';
-import { Props, SubmitEvent } from '@/app/lib/definitions';
+import { SubmitEvent } from '@/app/lib/definitions';
 import { createProductAction } from './action';
 import { useImg } from '@/app/lib/customHooks/useImage';
 import { ImagenButton, ImagenView } from '@/app/ui/dashboard/ImageForm';
 import { toastErr, toastSuccess } from '@/app/ui/toast';
+import { SubmitBtn } from '@/app/ui/input/SubmitBtn';
+import { Field } from '@/app/ui/form/Field';
 
 export default function ProductCreatePage() {
   return (
@@ -225,54 +226,7 @@ export function CreateProductForm() {
           </Field>
         </div>
       </div>
-
-      <input
-        className="bg-blue-400 m-auto mt-[2rem] px-8 py-2 rounded-xl cursor-pointer"
-        type="submit"
-        value="Crear"
-      />
+      <SubmitBtn text="Crear" />
     </form>
   );
 }
-interface fieldProps extends Props {
-  label: string;
-  id: string;
-  question?: string;
-  optional?: boolean;
-}
-
-function Field({
-  optional = false,
-  label,
-  children,
-  id,
-  question,
-}: fieldProps) {
-  return (
-    <div className="flex flex-col gap-y-[0.3rem] py-[0.5rem]">
-      <div className="flex text-sm">
-        <label className="ml-[0.2rem]" htmlFor={id}>
-          {label}
-          {optional && <span className="text-slate-700"> (opcional)</span>}:
-        </label>
-        {question && (
-          <Question
-            className="mx-[0.25rem] h-[0.84rem] w-[0.84rem] text-xs"
-            msg={question}
-          />
-        )}
-      </div>
-      {children}
-    </div>
-  );
-}
-
-/*
-	//photos      Json?            @db.Json
-	// photos      String[]            @db.MediumText
-	//prices      Price[] // Relación con precios
-	//priceRules  PriceRules[]
-	// categoryId  Int?
-	// category    Category?        @relation(fields: [categoryId], references: [id])
-	// variants    ProductVariant[] // Relación con variantes de producto
-*/

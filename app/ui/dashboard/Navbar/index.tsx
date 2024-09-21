@@ -11,7 +11,7 @@ import { DASHBOARD_PATH } from '@/app/lib/paths';
 
 const dashBoardIcons = [
   { icon: DashBoardIcon, label: 'Dashboard', link: DASHBOARD_PATH.HOME },
-  { icon: MenuIcon, label: 'Categorias', link: DASHBOARD_PATH.CATEGORY },
+  { icon: MenuIcon, label: 'Categorias', link: DASHBOARD_PATH.TAGS },
   { icon: ProductsIcon, label: 'Productos', link: DASHBOARD_PATH.PRODUCT },
   { icon: UserIcon, label: 'Usuarios', link: DASHBOARD_PATH.USERS },
   { icon: ConfigIcon, label: 'Configuraciones', link: DASHBOARD_PATH.CONFIG },

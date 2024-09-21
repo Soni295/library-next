@@ -14,9 +14,9 @@ export function CardConteiner({ elements }: CardContainerProps) {
 
 function ProductsNotFound() {
   return (
-    <div className="h-full w-full mt-20 md:text-5xl text-xl flex self-center justify-center">
+    <div className="h-full w-full mt-20 md:text-5xl border-green-700 border-2  border-solid text-xl flex self-center justify-center">
       <p className="text-center text-inactive-light">
-        No hay productos disponibles
+        No hay productos disponibles.
       </p>
     </div>
   );

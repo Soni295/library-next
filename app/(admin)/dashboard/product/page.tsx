@@ -61,7 +61,7 @@ function ProductTable({ data, totalPages }: ProductPage) {
         </THead>
         <TBody>
           {data.map((p) => (
-            <ProductField info={p} />
+            <ProductField key={p.id + 'product'} info={p} />
           ))}
         </TBody>
       </Table>
