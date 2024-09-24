@@ -57,23 +57,21 @@ model Tag {
   kind String
   name String
 
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
   productTag ProductTag[]
 }
 
-// model Category {
-//   id Int @id @default(autoincrement())
-// 
-//   name String //@db.VarChar(255)
-//   // products Product[]
-// 
-//   categorySuperiorId Int?
-//   categorySuperior   Category?  @relation("MainCategorySubCategories", fields: [categorySuperiorId], references: [id])
-//   SubCategory        Category[] @relation("MainCategorySubCategories")
-// 
-//   createdAt DateTime  @default(now())
-//   updateAt  DateTime  @default(now())
-//   deletedAt DateTime?
-// }
+model Category {
+  id   Int    @id @default(autoincrement())
+  name String //@db.VarChar(255)
+  tags Tag[]
+
+  //   createdAt DateTime  @default(now())
+  //   updateAt  DateTime  @default(now())
+  //   deletedAt DateTime?
+}
 
 model Mark {
   id   Int    @id @default(autoincrement())
@@ -135,10 +133,10 @@ model Product {
 // model ProductOnOrder {
 //   productId Int
 //   product   Product @relation(fields: [productId], references: [id])
-// 
+//
 //   orderId Int
 //   order   Order @relation(fields: [orderId], references: [id])
-// 
+//
 //   @@id([productId, orderId])
 // }
 

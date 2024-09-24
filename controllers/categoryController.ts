@@ -1,42 +1,15 @@
-import { Category } from '@prisma/client';
+import { TypesCompose } from '@/app/lib/compose';
 import { CategoryRepository } from '@/repositories/categoryRepository';
+import { inject, injectable } from 'inversify';
 
+@injectable()
 export class CategoryController {
-  constructor(private readonly categoryRepo: CategoryRepository) {}
+  constructor(
+    @inject(TypesCompose.categoryRepo)
+    private readonly categoryRepo: CategoryRepository,
+  ) {}
 
-  async save(category: Category) {
-    return await this.categoryRepo.save(category);
+  async save({ name }: { name: string }) {
+    return await this.categoryRepo.save({ name });
   }
-  /*
-	async getById(categoryId: number) {
-		return await prisma.category.findFirst({
-			where: { id: categoryId, deletedAt: null },
-		});
-	}
-
-	async getAll() {
-		return await prisma.category.findMany({
-			where: { deletedAt: null },
-		});
-	}
-
-	async update(category: CategoryUpdate) {
-		return await prisma.category.update({
-			where: { id: category.id },
-			data: {
-				...category,
-				updateAt: new Date(),
-			},
-		});
-	}
-
-	async deleteById(categoryId: number) {
-		return await prisma.category.update({
-			where: { id: categoryId },
-			data: {
-				deletedAt: new Date(),
-			},
-		});
-	}
-*/
 }

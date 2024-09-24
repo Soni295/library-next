@@ -1,14 +1,12 @@
 import prisma from '@/app/lib/db/prisma';
-import { Category } from '@prisma/client';
-import { CategoryUpdate } from '@/app/lib/definitions/models/category';
+import { injectable } from 'inversify';
 
+@injectable()
 export class CategoryRepository {
-  async save(category: Category) {
-    return await prisma.category.create({
-      data: { name: category.name },
-    });
+  async save({ name }: { name: string }) {
+    return await prisma.category.create({ data: { name } });
   }
-
+  /*
   async getById(categoryId: number) {
     return await prisma.category.findFirst({
       where: { id: categoryId, deletedAt: null },
@@ -39,4 +37,5 @@ export class CategoryRepository {
       },
     });
   }
+  */
 }

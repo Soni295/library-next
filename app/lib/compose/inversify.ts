@@ -9,6 +9,8 @@ import { UserRepository } from '@/repositories/userRepository';
 import { ProductRepository } from '@/repositories/productRepository';
 import { MarkRepository } from '@/repositories/markRepository';
 import { OrderRepository } from '@/repositories/orderRepository';
+import { CategoryRepository } from '@/repositories/categoryRepository';
+import { CategoryController } from '@/controllers/categoryController';
 
 const container = new Container();
 
@@ -18,6 +20,9 @@ container
   .to(ProductController);
 container.bind<MarkController>(TypesCompose.markCtrl).to(MarkController);
 container.bind<OrderController>(TypesCompose.orderCtrl).to(OrderController);
+container
+  .bind<CategoryController>(TypesCompose.categoryCtrl)
+  .to(CategoryController);
 
 container.bind<UserRepository>(TypesCompose.userRepo).to(UserRepository);
 container
@@ -25,10 +30,17 @@ container
   .to(ProductRepository);
 container.bind<MarkRepository>(TypesCompose.markRepo).to(MarkRepository);
 container.bind<OrderRepository>(TypesCompose.orderRepo).to(OrderRepository);
+container
+  .bind<CategoryRepository>(TypesCompose.categoryRepo)
+  .to(CategoryRepository);
 
 export const productCtrl = container.get<ProductController>(
   TypesCompose.productCtrl,
 );
+
 export const userCtrl = container.get<UserController>(TypesCompose.userCtrl);
 export const markCtrl = container.get<MarkController>(TypesCompose.markCtrl);
 export const orderCtrl = container.get<OrderController>(TypesCompose.orderCtrl);
+export const categoryCtrl = container.get<CategoryController>(
+  TypesCompose.categoryCtrl,
+);
