@@ -21,6 +21,7 @@ const dashBoardIcons = [
   { icon: ProductsIcon, label: 'Marcas', link: DASHBOARD_PATH.MARK },
   { icon: ProductsIcon, label: 'Productos', link: DASHBOARD_PATH.PRODUCT },
   { icon: TagIcon, label: 'Etiquetas', link: DASHBOARD_PATH.TAGS },
+  { icon: MenuIcon, label: 'Categorias', link: DASHBOARD_PATH.CATEGORY },
   { icon: MenuIcon, label: 'Compras', link: DASHBOARD_PATH.PURCHASE },
 ];
 

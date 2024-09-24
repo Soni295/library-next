@@ -14,13 +14,15 @@ export const CLIENT_PATH = {
 export const DASHBOARD_PATH = {
   HOME: `${DASHBOARD_BASE}`,
   PRODUCT: `${DASHBOARD_BASE}/product`,
+  CATEGORY: `${DASHBOARD_BASE}/category`,
+  USERS: `${DASHBOARD_BASE}/user`,
+  TAGS: `${DASHBOARD_BASE}/tag`,
+  MARK: `${DASHBOARD_BASE}/mark`,
   PRODUCTS_CREATE: `${DASHBOARD_BASE}/product/create`,
   PURCHASE_CREATE: `${DASHBOARD_BASE}/purchase/create`,
   MARK_CREATE: `${DASHBOARD_BASE}/mark/create`,
   TAGS_CREATE: `${DASHBOARD_BASE}/tag/create`,
-  USERS: `${DASHBOARD_BASE}/user`,
-  TAGS: `${DASHBOARD_BASE}/tag`,
-  MARK: `${DASHBOARD_BASE}/mark`,
+  CATEGORY_CREATE: `${DASHBOARD_BASE}/category/create`,
   CONFIG: `${DASHBOARD_BASE}/settings`,
   PURCHASE: `${DASHBOARD_BASE}/purchase`,
 } as const;
