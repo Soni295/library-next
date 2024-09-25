@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { DASHBOARD_PATH } from '@/app/lib/paths';
 import { Row, TBody, THead, Table, Td, Th } from '@/app/ui/tables';
 import { type ProductPage } from '@/repositories';
@@ -6,7 +7,7 @@ import { Pagination } from '@/app/ui/pagination';
 import { NotFound } from '@/app/ui/notFound';
 import { SearchInput } from './_components/SearchInput';
 import { productCtrl } from '@/app/lib/compose/inversify';
-import Link from 'next/link';
+import { SearchParams } from '@/app/lib/definitions/SearchParams';
 
 function ProductsTableEmpty() {
   return (
@@ -68,10 +69,6 @@ function ProductTable({ data, totalPages }: ProductPage) {
       <Pagination totalPages={totalPages} />
     </>
   );
-}
-
-interface SearchParams {
-  searchParams: { [key: string]: string | string[] | undefined };
 }
 
 export default async function ProductPage({ searchParams }: SearchParams) {

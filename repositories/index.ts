@@ -20,4 +20,8 @@ export interface SearchFilterProductStock extends PageSearchBasic {
   text?: string;
 }
 
+export interface SearchFilterCategory extends PageSearchBasic {
+  text?: string;
+}
+
 export interface PageSearchFilter extends PageSearchBasic {}

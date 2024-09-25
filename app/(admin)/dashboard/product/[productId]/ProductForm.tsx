@@ -10,6 +10,7 @@ import { ImagenButton, ImagenView } from '@/app/ui/dashboard/ImageForm';
 import { toastErr, toastSuccess } from '@/app/ui/toast';
 import { createProductAction, updateProductAction } from './action';
 import { Field } from '@/app/ui/form/Field';
+import { SubmitBtn } from '@/app/ui/input/SubmitBtn';
 
 type ChangeEv = ChangeEvent<HTMLSelectElement | HTMLInputElement>;
 
@@ -122,7 +123,7 @@ export function ProductForm({
               ID:{productId}
             </h2>
           )}
-          <ImagenView src={img.link} alt="hola" />
+          <ImagenView src={img.link} alt="Imagen" />
           <ImagenButton msg="Selecione foto" handleImageChange={setImg} />
         </div>
 
@@ -250,12 +251,7 @@ export function ProductForm({
           </Field>
         </div>
       </div>
-
-      <input
-        className="bg-blue-400 m-auto mt-[2rem] px-8 py-2 rounded-xl cursor-pointer"
-        type="submit"
-        value="Crear"
-      />
+      <SubmitBtn text="Crear" />
     </form>
   );
 }
