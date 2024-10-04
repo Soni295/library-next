@@ -10,6 +10,10 @@ export class CategoryController {
     private readonly categoryRepo: CategoryRepository,
   ) {}
 
+  async getAll() {
+    return this.categoryRepo.getAll();
+  }
+
   async getCategoriesByFilter(pageSearchFilter: SearchFilterCategory) {
     return this.categoryRepo.getCategoryByFilter(pageSearchFilter);
   }

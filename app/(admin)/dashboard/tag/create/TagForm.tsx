@@ -4,36 +4,39 @@ import { ChangeEvent, useState } from 'react';
 import { SubmitEvent } from '@/app/lib/definitions';
 import { Field } from '@/app/ui/form/Field';
 import { SubmitBtn } from '@/app/ui/input/SubmitBtn';
+import { toastErr } from '@/app/ui/toast';
+import { Form } from '@/app/ui/form/Form';
 
-interface Category {
-  id: number;
-  name: string;
-}
+export function TagForm({ categories = [], tag }: TagFormProps) {
+  const initial = {
+    name: tag ? tag.name : '',
+    categoryId: tag
+      ? String(tag.categoryId)
+      : categories[0]
+        ? categories[0]?.id
+        : '',
+  };
 
-interface TagCreateFormProps {
-  categories: Category[];
-}
+  const [state, setState] = useState(initial);
 
-type ChangeEv = ChangeEvent<HTMLSelectElement | HTMLInputElement>;
-
-export function TagCreateForm({ categories = [] }: TagCreateFormProps) {
-  const [state, setState] = useState({ name: '', categoryId: '' });
   const onSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
+    if (state.categoryId == '') {
+      toastErr('Se debe crear una categoria primero');
+    }
+
     console.log(state);
   };
 
   const fieldStyle = 'flex-1 py-[0.1em] rounded-lg pl-[0.5rem] text-sm';
 
-  const handleChange = (e: ChangeEv) => {
+  const handleChange = async (e: ChangeEv) => {
+    console.log(e.target.name, e.target.value);
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   return (
-    <form
-      className="w-[28rem] p-6 shadow-lg bg-secondary-light rounded-md"
-      onSubmit={onSubmit}
-    >
+    <Form onSubmit={onSubmit} className="w-[28rem]">
       <Field label="Etiqueta" id="name">
         <input
           id="name"
@@ -64,7 +67,23 @@ export function TagCreateForm({ categories = [] }: TagCreateFormProps) {
         </select>
       </Field>
 
-      <SubmitBtn text="Crear" />
-    </form>
+      <SubmitBtn text={tag?.id ? 'Actualizar' : 'Crear'} />
+    </Form>
   );
 }
+
+interface Category {
+  id: number;
+  name: string;
+}
+
+interface TagFormProps {
+  tag?: {
+    id: number;
+    name: string;
+    categoryId: number;
+  };
+  categories: Category[];
+}
+
+type ChangeEv = ChangeEvent<HTMLSelectElement | HTMLInputElement>;

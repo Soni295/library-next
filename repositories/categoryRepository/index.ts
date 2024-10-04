@@ -8,6 +8,10 @@ export class CategoryRepository {
     return await prisma.category.create({ data: { name } });
   }
 
+  async getAll() {
+    return await prisma.category.findMany({ select: { id: true, name: true } });
+  }
+
   async update({ name, id }: { id: number; name: string }) {
     console.log({ name, id });
     return await prisma.category.update({ where: { id }, data: { name } });
@@ -49,19 +53,19 @@ export class CategoryRepository {
 
   /*
 
-  async getAll() {
-    return await prisma.category.findMany({
-      where: { deletedAt: null },
-    });
-  }
+	async getAll() {
+		return await prisma.category.findMany({
+			where: { deletedAt: null },
+		});
+	}
 
-  async deleteById(categoryId: number) {
-    return await prisma.category.update({
-      where: { id: categoryId },
-      data: {
-        deletedAt: new Date(),
-      },
-    });
-  }
-  */
+	async deleteById(categoryId: number) {
+		return await prisma.category.update({
+			where: { id: categoryId },
+			data: {
+				deletedAt: new Date(),
+			},
+		});
+	}
+	*/
 }

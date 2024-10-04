@@ -11,6 +11,7 @@ import { ImagenButton, ImagenView } from '@/app/ui/dashboard/ImageForm';
 import { toastErr, toastSuccess } from '@/app/ui/toast';
 import { SubmitBtn } from '@/app/ui/input/SubmitBtn';
 import { Field } from '@/app/ui/form/Field';
+import { Form } from '@/app/ui/form/Form';
 
 export default function ProductCreatePage() {
   return (
@@ -90,12 +91,14 @@ export function CreateProductForm() {
   };
 
   const fieldStyle = 'flex-1 py-[0.1em] rounded-lg pl-[0.5rem] text-sm';
-
-  return (
+  /*
     <form
       className="p-6 shadow-lg flex flex-col align-center bg-secondary-light rounded-md"
       onSubmit={onSubmit}
     >
+	*/
+  return (
+    <Form onSubmit={onSubmit}>
       <div className="grid gap-x-5 grid-cols-3">
         <div className="justify-center">
           <ImagenView src={img.link} alt="hola" />
@@ -227,6 +230,6 @@ export function CreateProductForm() {
         </div>
       </div>
       <SubmitBtn text="Crear" />
-    </form>
+    </Form>
   );
 }

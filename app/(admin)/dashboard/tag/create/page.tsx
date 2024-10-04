@@ -1,9 +1,7 @@
-import { TagCreateForm } from './TagCreateForm';
+import { categoryCtrl } from '@/app/lib/compose/inversify';
+import { TagForm } from './TagForm';
 
-export default function TagCreatePage() {
-  return (
-    <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
-      <TagCreateForm />
-    </div>
-  );
+export default async function TagCreatePage() {
+  const categories = await categoryCtrl.getAll();
+  return <TagForm categories={categories} />;
 }
