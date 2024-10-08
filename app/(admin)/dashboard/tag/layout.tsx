@@ -9,7 +9,9 @@ export default async function Layout({ children }: Props) {
       <DashboardTitle title="Etiquetas">
         <CreateButton className="ml-[2rem]" href={DASHBOARD_PATH.TAGS_CREATE} />
       </DashboardTitle>
-      {children}
+      <div className="h-[calc(100vh-7rem)] flex flex-col justify-center items-center">
+        {children}
+      </div>
     </div>
   );
 }

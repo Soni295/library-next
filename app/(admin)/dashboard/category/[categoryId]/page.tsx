@@ -4,13 +4,13 @@ import { stringToNumber } from '@/app/lib/utils/convert';
 import { NotFound } from '@/app/ui/notFound';
 import { CategoryForm } from '../_components/CategoryForm';
 
-interface ProductPageProps {
+interface CategoryIdPageProps {
   params: { categoryId: string };
 }
 
-export default async function Page({
+export default async function CategoryIdPage({
   params: { categoryId },
-}: ProductPageProps) {
+}: CategoryIdPageProps) {
   const id = stringToNumber(categoryId);
   const data = await categoryCtrl.getById(id);
 

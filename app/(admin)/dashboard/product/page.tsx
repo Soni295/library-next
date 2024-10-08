@@ -21,7 +21,7 @@ function ProductsTableEmpty() {
 
 function ProductField({ info }: { info: ProductPage['data'][0] }) {
   return (
-    <Row key={'product' + info.id}>
+    <Row>
       <Td className="text-right">
         <Link href={`${DASHBOARD_PATH.PRODUCT}/${info.id}`}>{info.id}</Link>
       </Td>

@@ -9,4 +9,6 @@ export const TypesCompose = {
   orderRepo: Symbol.for('orderRepository'),
   categoryCtrl: Symbol.for('categoryController'),
   categoryRepo: Symbol.for('categoryRepository'),
+  tagCtrl: Symbol.for('tagController'),
+  tagRepo: Symbol.for('tagRepository'),
 };

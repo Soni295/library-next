@@ -16,8 +16,13 @@ export interface PageSearchBasic {
   pageSize?: number;
 }
 
+export interface SearchFilterByText extends PageSearchBasic {
+  text?: string;
+}
+
 export interface SearchFilterProductStock extends PageSearchBasic {
   text?: string;
+  tagsIds?: number[];
 }
 
 export interface SearchFilterCategory extends PageSearchBasic {
