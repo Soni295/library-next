@@ -17,7 +17,7 @@ export function Field({
         </label>
         {question && (
           <Question
-            className="mx-[0.25rem] h-[0.8rem] w-[0.8rem] text-xs"
+            className="mx-[0.25rem] h-[1rem] w-[1rem] text-xs"
             msg={question}
           />
         )}

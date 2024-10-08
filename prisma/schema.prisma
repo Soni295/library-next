@@ -25,7 +25,7 @@ model User {
 
   orders    Order[]
   createdAt DateTime  @default(now())
-  updateAt  DateTime  @default(now())
+  updatedAt DateTime  @default(now())
   deletedAt DateTime?
 }
 
@@ -54,13 +54,16 @@ model ProductTag {
 
 model Tag {
   id   Int    @id @default(autoincrement())
-  kind String
   name String
 
   categoryId Int
   category   Category @relation(fields: [categoryId], references: [id])
 
   productTag ProductTag[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+  deletedAt DateTime?
 }
 
 model Category {

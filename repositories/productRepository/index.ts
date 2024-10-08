@@ -38,7 +38,7 @@ export class ProductRepository {
       where: { id: product.id },
     });
 
-    return;
+    return productDb;
 
     /*
 		const mark = product.markId

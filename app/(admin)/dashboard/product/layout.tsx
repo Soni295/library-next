@@ -14,7 +14,9 @@ export default async function Layout({ children }: Props) {
           href={DASHBOARD_PATH.PRODUCTS_CREATE}
         />
       </DashboardTitle>
-      <Suspense fallback={<SpinnerMain />}>{children}</Suspense>
+      <div className="h-[calc(100vh-7rem)] flex flex-col justify-center items-center">
+        <Suspense fallback={<SpinnerMain />}>{children}</Suspense>
+      </div>
     </div>
   );
 }

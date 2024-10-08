@@ -10,8 +10,7 @@
 		"build": "npm run build:files && npm run build:db &&npm run build:next",
 		"start": "next start",
 		"lint": "next lint",
-		"sort": "prettier . --write",
-		"sort2": "prettier ./controllers/ ./app ./repositories ./lib --write",
+		"sort": "prettier ./controllers/ ./app ./repositories --write",
 		"prepare": "husky"
 	},
 	"dependencies": {

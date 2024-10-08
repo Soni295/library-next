@@ -33,6 +33,7 @@ export const SERVER_PATH = {
   SEARCH_CLIENT: `${API_URL_BASE}/search`,
   MARK: `${API_URL_BASE}/mark`,
   MARKAll: `${API_URL_BASE}/mark/all`,
+  TAG: `${API_URL_BASE}/tag`,
 } as const;
 
 export const PATH = {

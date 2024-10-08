@@ -121,37 +121,7 @@ export class ProductController extends GeneralController {
     if (product == null) return null;
     return { ...product, basePrice: product.basePrice.toNumber() };
   }
-  /*
-	async getByCategoryId(categoryId: number) {
-		return await prisma.product.findMany({
-			where: { categoryId: categoryId, deletedAt: null },
-		});
-	}
 
-	async getByProductNameAndCategoryId(categoryId: number, productName: string) {
-		return await prisma.product.findMany({
-			where: { name: productName, categoryId: categoryId, deletedAt: null },
-		});
-	}
-
-	async getAll() {
-		return await prisma.product.findMany({ where: { deletedAt: null } });
-	}
-
-	async update(product: IProduct) {
-		return await prisma.product.update({
-			where: { id: product.id },
-			data: { ...product, updateAt: new Date() },
-		});
-	}
-
-	async deleteById(productId: number) {
-		return await prisma.product.update({
-			where: { id: productId },
-			data: { deletedAt: new Date() },
-		});
-	}
-	*/
   async getProductsByFilter(pageSearchFilter: SearchFilterProductStock) {
     return this.productRepository.getProductsByFilter(pageSearchFilter);
   }

@@ -32,6 +32,7 @@ export class Criteria<T> {
   ) {}
   //page: number = 1, pageSize: number = 10
   apply() {
+    fk;
     const forma = '';
   }
 }

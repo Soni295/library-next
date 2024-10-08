@@ -2,7 +2,7 @@ import { productCtrl } from '@/app/lib/compose/inversify';
 import { DASHBOARD_PATH } from '@/app/lib/paths';
 import { stringToNumber } from '@/app/lib/utils/convert';
 import { NotFound } from '@/app/ui/notFound';
-import { ProductForm } from './ProductForm';
+import { ProductForm } from '../_components/ProductForm';
 
 interface ProductPageProps {
   params: { productId: string };
@@ -22,9 +22,6 @@ export default async function Page({
       />
     );
   }
-  const onSubmit = (form: FormData) => {
-    console.log(form);
-  };
 
   return (
     <ProductForm

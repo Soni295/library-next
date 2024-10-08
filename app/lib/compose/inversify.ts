@@ -11,9 +11,12 @@ import { MarkRepository } from '@/repositories/markRepository';
 import { OrderRepository } from '@/repositories/orderRepository';
 import { CategoryRepository } from '@/repositories/categoryRepository';
 import { CategoryController } from '@/controllers/categoryController';
+import { TagRepository } from '@/repositories/tagRepository';
+import { TagController } from '@/controllers/tagController';
 
 const container = new Container();
 
+container.bind<TagController>(TypesCompose.tagCtrl).to(TagController);
 container.bind<UserController>(TypesCompose.userCtrl).to(UserController);
 container
   .bind<ProductController>(TypesCompose.productCtrl)
@@ -34,10 +37,13 @@ container
   .bind<CategoryRepository>(TypesCompose.categoryRepo)
   .to(CategoryRepository);
 
+container.bind<TagRepository>(TypesCompose.tagRepo).to(TagRepository);
+
 export const productCtrl = container.get<ProductController>(
   TypesCompose.productCtrl,
 );
 
+export const tagCtrl = container.get<TagController>(TypesCompose.tagCtrl);
 export const userCtrl = container.get<UserController>(TypesCompose.userCtrl);
 export const markCtrl = container.get<MarkController>(TypesCompose.markCtrl);
 export const orderCtrl = container.get<OrderController>(TypesCompose.orderCtrl);

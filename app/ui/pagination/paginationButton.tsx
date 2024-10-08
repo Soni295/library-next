@@ -19,9 +19,10 @@ export function PaginationButton({
     //'disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none',
     {
       'active:bg-gray-900/20': !disabled,
-      'hover:bg-gray-800/80': !disabled,
+      'hover:bg-gray-900': !disabled,
       'text-white': !disabled,
-      'bg-gray-900': !disabled,
+      'bg-gray-900/80': !disabled,
+
       'cursor-default': disabled,
       'text-gray-400': disabled,
       'bg-gray-200': disabled,

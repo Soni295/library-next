@@ -18,10 +18,14 @@ export function PaginationItem({
     'align-middle font-sans text-xs font-medium disabled:pointer-events-none',
     'transition-all disabled:shadow-none',
     {
-      'bg-gray-900': disabled,
-      'text-white': disabled,
+      //'bg-gray-900': disabled,
+      'bg-gray-200': disabled,
+      'text-gray-400': disabled,
       'cursor-default': disabled,
-      'text-gray-900': !disabled,
+      'active:bg-gray-900/20': !disabled,
+      'hover:bg-gray-900': !disabled,
+      'text-white': !disabled,
+      'bg-gray-900/80': !disabled,
     },
   );
 

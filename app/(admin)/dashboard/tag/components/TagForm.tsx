@@ -1,13 +1,18 @@
 'use client';
 
 import { ChangeEvent, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { SubmitEvent } from '@/app/lib/definitions';
 import { Field } from '@/app/ui/form/Field';
 import { SubmitBtn } from '@/app/ui/input/SubmitBtn';
-import { toastErr } from '@/app/ui/toast';
+import { toastErr, toastSuccess } from '@/app/ui/toast';
 import { Form } from '@/app/ui/form/Form';
+import { createTagAction, deleteTagAction, updateTagAction } from '../actions';
+import { DASHBOARD_PATH } from '@/app/lib/paths';
+import { DeleteBtn } from '@/app/ui/input/DeleteBtn';
 
 export function TagForm({ categories = [], tag }: TagFormProps) {
+  const router = useRouter();
   const initial = {
     name: tag ? tag.name : '',
     categoryId: tag
@@ -19,13 +24,49 @@ export function TagForm({ categories = [], tag }: TagFormProps) {
 
   const [state, setState] = useState(initial);
 
+  const onDelete = async () => {
+    const res = await deleteTagAction(tag?.id as number);
+
+    if (res.status === 200) {
+      toastSuccess('Se ha borrado correctamenten');
+      router.push(DASHBOARD_PATH.TAGS);
+    }
+    if (res.status === 500) {
+      if (res.error) toastErr(res.error);
+    }
+  };
+
   const onSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
+
     if (state.categoryId == '') {
       toastErr('Se debe crear una categoria primero');
     }
 
-    console.log(state);
+    const formData = new FormData();
+    formData.set('name', state.name);
+    formData.set('categoryId', String(state.categoryId));
+
+    let res: { status: number; error?: string } | null = null;
+
+    if (tag) {
+      formData.set('id', String(tag.id));
+      res = await updateTagAction(formData);
+    } else {
+      res = await createTagAction(formData);
+    }
+
+    if (res.status === 200) {
+      toastSuccess(
+        tag
+          ? 'Se ha actualizado correctamente.'
+          : 'La categoria se creo exitosamente.',
+      );
+      router.push(DASHBOARD_PATH.TAGS);
+    }
+    if (res.status === 500) {
+      if (res.error) toastErr(res.error);
+    }
   };
 
   const fieldStyle = 'flex-1 py-[0.1em] rounded-lg pl-[0.5rem] text-sm';
@@ -68,6 +109,7 @@ export function TagForm({ categories = [], tag }: TagFormProps) {
       </Field>
 
       <SubmitBtn text={tag?.id ? 'Actualizar' : 'Crear'} />
+      {tag && <DeleteBtn text="eliminar" onClick={onDelete} />}
     </Form>
   );
 }
