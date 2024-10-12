@@ -25,9 +25,9 @@ export default async function Page({
 
   return (
     <ProductForm
-      productId={id}
       imgInfo={data.photo}
       productInfo={{
+        id: id,
         name: data.name,
         basePrice: data.basePrice,
         mark: data.markId ? String(data.markId) : 'no asignada',

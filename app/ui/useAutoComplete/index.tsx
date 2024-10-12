@@ -1,7 +1,7 @@
 import {
   ChangeEvent,
   KeyboardEvent,
-  MouseEventHandler,
+  MouseEvent as Me,
   useRef,
   useState,
 } from 'react';
@@ -80,20 +80,18 @@ export function useAutoComplete({ source, onChange }: useAutoCompleteProps) {
       // [KEY_CODES.PAGE_DOWN]: pageDown,
       // [KEY_CODES.PAGE_UP]: pageUp,
     };
-
-    if (keyOperation[e.code]) {
-      keyOperation[e.code]();
+    const action = keyOperation[e.code];
+    if (action) {
+      action();
       return;
     }
-
     setSelectedIndex(-1);
   }
 
   return {
     bindOption: {
-      onClick: (e: MouseEventHandler<HTMLLIElement>) => {
+      onClick: (e: Me<HTMLLIElement, MouseEvent>) => {
         const nodes = Array.from(listRef.current.children);
-        console.log(nodes);
         selectOption(nodes.indexOf(e.target.closest('li')));
       },
     },
@@ -108,6 +106,7 @@ export function useAutoComplete({ source, onChange }: useAutoCompleteProps) {
     selectedIndex,
   };
 }
+type a = ReturnType<typeof useAutoComplete>;
 
 export interface AutoCompleteElement {
   id: number;
