@@ -22,7 +22,6 @@ export default async function Page({
       />
     );
   }
-
   return (
     <ProductForm
       imgInfo={data.photo}
@@ -36,6 +35,7 @@ export default async function Page({
         minQuantity: data.minQuantity,
         code: data.code as string,
         enable: data.enable ? '1' : '0',
+        tags: data.productTag.map((t) => ({ id: t.tagId, name: t.tag.name })),
       }}
     />
   );

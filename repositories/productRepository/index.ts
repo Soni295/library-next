@@ -29,6 +29,22 @@ export class ProductRepository {
         enable: product.enable,
         photo: product.photo,
         ...mark,
+        productTag: {
+          create: product.tagIds.map((t) => ({ tag: { connect: { id: t } } })),
+        },
+      },
+    });
+  }
+
+  async addTag(info: {
+    productId: number;
+    tagId: number;
+  }): Promise<MaybeProduct> {
+    return await prisma.product.update({
+      where: { id: info.productId },
+      data: {
+        productTag: { create: [{ tagId: info.tagId }] },
+        updateAt: new Date(),
       },
     });
   }
@@ -65,8 +81,11 @@ export class ProductRepository {
     return prisma.product.findMany({ where: { id: { in: ids } } });
   }
 
-  async getById({ id }: ProductId): Promise<MaybeProduct> {
-    return await prisma.product.findUnique({ where: { id, deletedAt: null } });
+  async getById({ id }: ProductId) {
+    return await prisma.product.findUnique({
+      where: { id, deletedAt: null },
+      include: { productTag: { include: { tag: true } } },
+    });
   }
 
   async getAll(): Promise<MaybeProducts> {

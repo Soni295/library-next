@@ -26,6 +26,7 @@ export class ProductController extends GeneralController {
 
   async update(formData: FormData) {
     this.userPermissionVerifier.isAdmin(); // cambiar luego
+
     try {
       const file = formData.get('photo') as File;
       const photo = await handlerImgProduct.saveFile(file);
@@ -53,7 +54,7 @@ export class ProductController extends GeneralController {
           status: '500',
         };
       }
-      await this.productRepository.save(validatedProduct.data);
+      //await this.productRepository.save(validatedProduct.data);
     } catch (err) {
       if (err instanceof PrismaClientValidationError) {
         console.log('alto error PrismaClientValidationError', err.message);
@@ -70,12 +71,20 @@ export class ProductController extends GeneralController {
     return { status: '200' };
   }
 
+  async addTag(info: { productId: number; tagId: number }) {
+    this.userPermissionVerifier.isAdmin(); // cambiar luego
+    await this.productRepository.addTag(info);
+  }
+
   async save(formData: FormData) {
     this.userPermissionVerifier.isAdmin(); // cambiar luego
     try {
       const file = formData.get('photo') as File;
       const photo = await handlerImgProduct.saveFile(file);
-
+      const tagIds = JSON.parse(formData.get('tagIds') as string) as {
+        id: number;
+      }[];
+      console.log(tagIds);
       const mark = formData.get('mark');
       const validatedProduct = ProductCreateInputSchema.safeParse({
         name: formData.get('name'),
@@ -87,6 +96,7 @@ export class ProductController extends GeneralController {
         photo: photo,
         quantity: Number(formData.get('quantity')),
         minQuantity: Number(formData.get('minQuantity')),
+        tagIds: tagIds.map((t) => t.id),
       });
 
       if (!validatedProduct.success) {
