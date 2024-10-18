@@ -9,16 +9,21 @@ const defaultValues = {
   code: '',
   mark: 'No asignada',
   enable: '0',
+  tags: [],
 };
 
-export function useProductInfo(productInfo: IproductInfo = defaultValues) {
-  const [state, setState] = useState<IproductInfo>(productInfo);
+export function useProductInfo(data: IproductInfo = defaultValues) {
+  const [state, setState] = useState<IproductInfo>(data);
+
+  function addTag(tag: { id: number; name: string }) {
+    setState((prev) => ({ ...prev, tags: prev.tags.concat(tag) }));
+  }
 
   const handleChange = (e: ChangeEv) => {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  return [state, handleChange] as const;
+  return [state, handleChange, addTag] as const;
 }
 
 export interface IproductInfo {
@@ -31,6 +36,7 @@ export interface IproductInfo {
   code: string;
   mark: string;
   enable: string;
+  tags: { id: number; name: string }[];
 }
 
 type ChangeEv = ChangeEvent<HTMLSelectElement | HTMLInputElement>;

@@ -14,7 +14,7 @@ const markId = z.number().nullish();
 const enable = z.boolean();
 const quantity = z.number();
 const minQuantity = z.number();
-//const categoryId = z.number()
+const tagIds = z.array(z.number());
 
 export const ProductCreateInputSchema = z.object({
   name,
@@ -26,6 +26,7 @@ export const ProductCreateInputSchema = z.object({
   enable,
   markId,
   photo,
+  tagIds,
 });
 
 export const ProductUpdateInputSchema = z.object({
@@ -46,17 +47,17 @@ export type ProductUpdateInput = z.infer<typeof ProductUpdateInputSchema>;
 
 /*
 (alias) type ProductPrisma = {
-    id: number;
-    name: string;
-    price: Decimal;
-    code: string | null;
-    description: string | null;
-    observation: string | null;
-    photos: Prisma.JsonValue;
-    markId: number;
-    categoryId: number;
-    createdAt: Date;
-    updateAt: Date;
-    deletedAt: Date | null;
+		id: number;
+		name: string;
+		price: Decimal;
+		code: string | null;
+		description: string | null;
+		observation: string | null;
+		photos: Prisma.JsonValue;
+		markId: number;
+		categoryId: number;
+		createdAt: Date;
+		updateAt: Date;
+		deletedAt: Date | null;
 }
 */

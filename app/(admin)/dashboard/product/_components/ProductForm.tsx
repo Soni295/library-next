@@ -1,10 +1,15 @@
 'use client';
 
+import { DetailedHTMLProps, InputHTMLAttributes } from 'react';
 import { SubmitEvent } from '@/app/lib/definitions';
 import { useImg } from '@/app/lib/customHooks/useImage';
 import { ImagenButton, ImagenView } from '@/app/ui/dashboard/ImageForm';
 import { toastErr, toastSuccess } from '@/app/ui/toast';
-import { createProductAction, updateProductAction } from './actions';
+import {
+  addTagAction,
+  createProductAction,
+  updateProductAction,
+} from './actions';
 import { Field } from '@/app/ui/form/Field';
 import { SubmitBtn } from '@/app/ui/input/SubmitBtn';
 import { tagService } from '@/app/lib/fetch/api/tag';
@@ -13,18 +18,33 @@ import { IproductInfo, useAllMarks, useProductInfo } from './customhooks';
 import { InputTagSearch } from './InputTagSearch';
 
 export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
-  const autoComplete = useAutoComplete({
-    onChange(element) {
-      console.log(element);
+  const [state, handleChange, addTag] = useProductInfo(productInfo);
+  const autoComplete = useAutoComplete<{
+    id: number;
+    name: string;
+    createdAt: string;
+  }>({
+    async onChange(element) {
+      if (!productInfo?.id) {
+        addTag({ id: element.id, name: element.name });
+        return;
+      }
+      const data = { productId: productInfo.id, tagId: element.id };
+      const res = await addTagAction(data);
+      if (res.status === '200') {
+        toastSuccess('La etiqueta se agrego exitosamente.');
+        addTag({ id: element.id, name: element.name });
+      }
+      if (res.status === '500') if (res.error) toastErr(res.error);
     },
     async source(search) {
       const tags = await tagService.findByName(search);
-      // filtrar los que no van
-      return tags;
+
+      // filtrar los que no van de los que ya vienen por defecto
+      return tags.filter((t) => !state.tags.some((st) => st.id == t.id));
     },
   });
 
-  const [state, handleChange] = useProductInfo(productInfo);
   const [img, setImg] = useImg(imgInfo);
   const [marks] = useAllMarks();
 
@@ -40,22 +60,24 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
     form.set('enable', state.enable);
     form.set('quantity', String(state.quantity));
     form.set('minQuantity', String(state.minQuantity));
-
     if (img.file) {
       form.append('photo', img.file);
     }
 
     if (!productInfo?.id) {
+      form.set('tagIds', JSON.stringify(state.tags));
       const res = await createProductAction(form);
-
-      if (res.status === '200') toastSuccess('La marca se creo exitosamente.');
+      if (res.status === '200')
+        toastSuccess('El producto se creo exitosamente.');
       if (res.status === '500') if (res.error) toastErr(res.error);
       return;
     }
     form.set('id', String(productInfo.id));
 
     const res = await updateProductAction(form);
-    console.log({ res });
+    if (res.status === '200')
+      toastSuccess('El producto se actualizo exitosamente.');
+    if (res.status === '500') if (res.error) toastErr(res.error);
   };
 
   const questions = {
@@ -92,11 +114,10 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
 
         <div>
           <Field label="Nombre" id="name">
-            <input
+            <Input
               id="name"
               type="text"
               name="name"
-              className={fieldStyle}
               value={state.name}
               onChange={handleChange}
               placeholder="Lapiz Faber-Castell HB negro"
@@ -134,12 +155,11 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
           </Field>
 
           <Field label="Precio Base" id="price" question={questions.basePrice}>
-            <input
+            <Input
               id="price"
               name="basePrice"
               step="0.01"
               type="number"
-              className={fieldStyle}
               value={state.basePrice}
               onChange={handleChange}
               placeholder="20.20"
@@ -156,10 +176,9 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
             id="description"
             question={questions.description}
           >
-            <input
+            <Input
               id="description"
               type="text"
-              className={fieldStyle}
               value={state.description}
               onChange={handleChange}
               name="description"
@@ -168,10 +187,9 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
           </Field>
 
           <Field optional label="Codigo" id="code" question={questions.code}>
-            <input
+            <Input
               id="code"
               type="text"
-              className={fieldStyle}
               value={state.code}
               onChange={handleChange}
               name="code"
@@ -185,10 +203,9 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
             id="quantity"
             question={questions.quantity}
           >
-            <input
+            <Input
               id="quantity"
               type="number"
-              className={fieldStyle}
               value={state.quantity}
               onChange={handleChange}
               name="quantity"
@@ -202,10 +219,9 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
             id="minQuantity"
             question={questions.minQuantity}
           >
-            <input
+            <Input
               id="minQuantity"
               type="number"
-              className={fieldStyle}
               value={state.minQuantity}
               onChange={handleChange}
               name="minQuantity"
@@ -215,12 +231,31 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
         </div>
 
         <div>
-          <p>etiquetas </p>
+          <div>etiqueta</div>
+          <InputTagSearch data={autoComplete} />
+          <div>
+            {state.tags.map((tag) => (
+              <p key={`tag-${tag.id}-${tag.name}`}>{tag.name}</p>
+            ))}
+          </div>
         </div>
       </div>
-      <InputTagSearch data={autoComplete} />
-      <SubmitBtn text="Crear" />
+      <SubmitBtn text={productInfo?.id ? 'Actualizar' : 'Crear'} />
     </form>
+  );
+}
+
+function Input(
+  rest: DetailedHTMLProps<
+    InputHTMLAttributes<HTMLInputElement>,
+    HTMLInputElement
+  >,
+) {
+  return (
+    <input
+      {...rest}
+      className="flex-1 py-[0.1em] rounded-lg pl-[0.5rem] text-sm"
+    />
   );
 }
 

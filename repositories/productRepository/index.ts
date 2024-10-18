@@ -29,35 +29,47 @@ export class ProductRepository {
         enable: product.enable,
         photo: product.photo,
         ...mark,
+        productTag: {
+          create: product.tagIds.map((t) => ({ tag: { connect: { id: t } } })),
+        },
+      },
+    });
+  }
+
+  async addTag(info: {
+    productId: number;
+    tagId: number;
+  }): Promise<MaybeProduct> {
+    console.log(info);
+    return await prisma.product.update({
+      where: { id: info.productId },
+      data: {
+        productTag: { create: [{ tagId: info.tagId }] },
+        updateAt: new Date(),
       },
     });
   }
 
   async update(product: ProductUpdateInput): Promise<MaybeProduct> {
-    const productDb = await prisma.product.findFirst({
+    const mark = product.markId
+      ? { mark: { connect: { id: product.markId } } }
+      : {};
+
+    return await prisma.product.update({
       where: { id: product.id },
+      data: {
+        name: product.name,
+        quantity: product.quantity,
+        minQuantity: product.minQuantity,
+        description: product.description,
+        code: product.code,
+        basePrice: product.basePrice,
+        enable: product.enable,
+        photo: product.photo,
+        updateAt: new Date(),
+        ...mark,
+      },
     });
-
-    return productDb;
-
-    /*
-		const mark = product.markId
-			? { mark: { connect: { id: product.markId } } }
-			: {};
-		return await prisma.product.create({
-			data: {
-				name: product.name,
-				quantity: product.quantity,
-				minQuantity: product.minQuantity,
-				description: product.description,
-				code: product.code,
-				basePrice: product.basePrice,
-				enable: product.enable,
-				photo: product.photo,
-				...mark,
-			},
-		});
-		*/
   }
 
   async getManyById(pIds: ProductId[]): Promise<MaybeProducts> {
@@ -65,8 +77,11 @@ export class ProductRepository {
     return prisma.product.findMany({ where: { id: { in: ids } } });
   }
 
-  async getById({ id }: ProductId): Promise<MaybeProduct> {
-    return await prisma.product.findUnique({ where: { id, deletedAt: null } });
+  async getById({ id }: ProductId) {
+    return await prisma.product.findUnique({
+      where: { id, deletedAt: null },
+      include: { productTag: { include: { tag: true } } },
+    });
   }
 
   async getAll(): Promise<MaybeProducts> {

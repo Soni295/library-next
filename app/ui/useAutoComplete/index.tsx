@@ -12,7 +12,10 @@ const KEY_CODES = {
   ESCAPE: 'Space',
   ENTER: 'Enter',
 };
-export function useAutoComplete({ source, onChange }: useAutoCompleteProps) {
+export function useAutoComplete<T>({
+  source,
+  onChange,
+}: useAutoCompleteProps<T>) {
   const [textValue, setTextValue] = useState('');
   const [isBusy, setBusy] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(-1);
@@ -113,7 +116,7 @@ export interface AutoCompleteElement {
   name: string;
 }
 
-interface useAutoCompleteProps {
+interface useAutoCompleteProps<T> {
   source: (search: string) => Promise<AutoCompleteElement[]>;
-  onChange: (element: AutoCompleteElement) => void;
+  onChange: (element: T) => Promise<void>;
 }
