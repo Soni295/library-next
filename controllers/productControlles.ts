@@ -86,6 +86,21 @@ export class ProductController extends GeneralController {
     return { status: '200' };
   }
 
+  async removeTag(info: { productId: number; tagId: number }) {
+    this.userPermissionVerifier.isAdmin(); // cambiar luego
+    try {
+      await this.productRepository.removeTag(info);
+    } catch (err) {
+      if (err instanceof Error) {
+        return {
+          status: '500',
+          error: err.message,
+        };
+      }
+    }
+    return { status: '200' };
+  }
+
   async addTag(info: { productId: number; tagId: number }) {
     this.userPermissionVerifier.isAdmin(); // cambiar luego
     try {

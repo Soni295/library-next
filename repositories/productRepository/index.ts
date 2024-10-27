@@ -7,6 +7,7 @@ import {
 import { ProductPrisma } from '@/app/lib/db/prisma';
 import { PageSearchFilter, ProductPage, SearchFilterProductStock } from '..';
 import { Maybe } from '@/app/lib/definitions/general';
+import { TagIcon } from '@/app/ui/dashboard/SideBar/icons';
 
 export type MaybeProduct = Maybe<ProductPrisma>;
 export type MaybeProducts = Maybe<ProductPrisma[]>;
@@ -40,13 +41,25 @@ export class ProductRepository {
     productId: number;
     tagId: number;
   }): Promise<MaybeProduct> {
-    console.log(info);
     return await prisma.product.update({
       where: { id: info.productId },
       data: {
         productTag: { create: [{ tagId: info.tagId }] },
         updateAt: new Date(),
       },
+    });
+  }
+
+  async removeTag({
+    tagId,
+    productId,
+  }: {
+    productId: number;
+    tagId: number;
+  }): Promise<void> {
+    console.log({ productId, tagId });
+    await prisma.productTag.deleteMany({
+      where: { tagId, productId },
     });
   }
 

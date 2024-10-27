@@ -8,6 +8,7 @@ import { toastErr, toastSuccess } from '@/app/ui/toast';
 import {
   addTagAction,
   createProductAction,
+  removeTagAction,
   updateProductAction,
 } from './actions';
 import { Field } from '@/app/ui/form/Field';
@@ -18,7 +19,7 @@ import { IproductInfo, useAllMarks, useProductInfo } from './customhooks';
 import { InputTagSearch } from './InputTagSearch';
 
 export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
-  const [state, handleChange, addTag] = useProductInfo(productInfo);
+  const [state, handleChange, addTag, removeTag] = useProductInfo(productInfo);
   const autoComplete = useAutoComplete<{
     id: number;
     name: string;
@@ -47,6 +48,23 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
 
   const [img, setImg] = useImg(imgInfo);
   const [marks] = useAllMarks();
+
+  const deleteTag = async (tagId: number, productId?: number) => {
+    if (productId) {
+      const res = await removeTagAction({
+        tagId,
+        productId: productId as number,
+      });
+
+      if (res.status === '500') {
+        if (res.error) toastErr(res.error);
+        return;
+      }
+    }
+
+    removeTag(tagId);
+    toastSuccess('La etiqueta se actualizo exitosamente.');
+  };
 
   const onSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
@@ -233,9 +251,22 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
         <div>
           <div>etiqueta</div>
           <InputTagSearch data={autoComplete} />
-          <div>
+          <div className="flex flex-col gap-1 mt-[0.2rem] overscroll-none">
             {state.tags.map((tag) => (
-              <p key={`tag-${tag.id}-${tag.name}`}>{tag.name}</p>
+              <div
+                className="flex text-xs py-[0.05rem] bg-blue-300"
+                key={`tag-${tag.id}-${tag.name}`}
+              >
+                <p className="flex-1 truncate">{tag.name}</p>
+                <span
+                  onClick={() => {
+                    deleteTag(tag.id, productInfo?.id);
+                  }}
+                  className="flex-none pr-[0.3rem] text-center text-bold hover:poiter"
+                >
+                  x
+                </span>
+              </div>
             ))}
           </div>
         </div>

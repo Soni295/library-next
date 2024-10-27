@@ -19,11 +19,18 @@ export function useProductInfo(data: IproductInfo = defaultValues) {
     setState((prev) => ({ ...prev, tags: prev.tags.concat(tag) }));
   }
 
+  function removeTag(tagId: number) {
+    setState((prev) => ({
+      ...prev,
+      tags: prev.tags.filter((f) => f.id !== tagId),
+    }));
+  }
+
   const handleChange = (e: ChangeEv) => {
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  return [state, handleChange, addTag] as const;
+  return [state, handleChange, addTag, removeTag] as const;
 }
 
 export interface IproductInfo {
