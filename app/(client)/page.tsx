@@ -6,5 +6,5 @@ export default async function Home() {
   const productPage = await productCtrl.getProductsByFilterForClient({});
   await importar();
 
-  return <CardConteiner elements={productPage.data} />;
+  return <CardConteiner elements={productPage.data.info} />;
 }

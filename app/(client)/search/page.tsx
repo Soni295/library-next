@@ -5,11 +5,26 @@ import { SearchParams } from '@/app/lib/definitions/SearchParams';
 export default async function Search(searchParams: SearchParams) {
   const query = (searchParams.searchParams['q'] as string) || '';
   const tags = (searchParams.searchParams['tid'] as string) || '';
-  //const tagIds = tags.split('_')
-  console.log(searchParams);
+
+  //console.log(searchParams);
 
   const productPage = await productCtrl.getProductsByFilterForClient({
     text: query,
   });
-  return <CardConteiner elements={productPage.data} />;
+  console.log({ productPage });
+  return (
+    <div className="flex flex-row bg-neutral-100 min-h-screen w-screen overflow-hidden">
+      <SearchSideBar />
+      <div className="flex-1">
+        <CardConteiner elements={productPage.data.info} />
+      </div>
+    </div>
+  );
+}
+export function SearchSideBar() {
+  return (
+    <div className="flex flex-col bg-neutral-100 border border-solid border-neutral-400 w-60 p-3">
+      hola
+    </div>
+  );
 }

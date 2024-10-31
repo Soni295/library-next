@@ -101,6 +101,19 @@ export class ProductRepository {
     return await prisma.product.findMany({ where: { deletedAt: null } });
   }
 
+  async getTagsProductsByFilter({ text = '' }: SearchFilterProductStock) {
+    const info = await prisma.category.findMany({
+      where: {
+        tags: {
+          some: {
+            productTag: { some: { product: { name: { contains: text } } } },
+          },
+        },
+      },
+    });
+    console.log(info);
+  }
+
   async getProductsByFilter({
     page = 1,
     pageSize = 20,

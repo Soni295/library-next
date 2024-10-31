@@ -1,0 +1,18 @@
+usuario normal
+email: Armando@gmail.com
+pass: 123456
+
+Revisar de cuando se actualiza el registrarse no aparece el carrito en la navbar.
+
+client:
+Agregar la pagina del producto :3
+/[productId]
+	Agregar el No encontrado en caso de no encontrar el producto.
+	Agregar el boton para agregar un producto.
+	Agregar para actualizar el contador del producto.
+
+
+/dash/purchase
+	Agregar las compras realizadas, un filtro por usuario y orden por tiempo
+	y que se pueda modificar la compra con una notificacion que fue modificada en 
+	todo caso.

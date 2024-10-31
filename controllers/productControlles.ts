@@ -192,7 +192,9 @@ export class ProductController extends GeneralController {
 
     return {
       ...rest,
-      data: info,
+      data: {
+        info,
+      },
     };
   }
 }

@@ -254,7 +254,7 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
           <div className="flex flex-col gap-1 mt-[0.2rem] overscroll-none">
             {state.tags.map((tag) => (
               <div
-                className="flex text-xs py-[0.05rem] bg-blue-300"
+                className="flex text-xs py-[0.05rem] px-[0.5rem] bg-blue-200"
                 key={`tag-${tag.id}-${tag.name}`}
               >
                 <p className="flex-1 truncate">{tag.name}</p>
@@ -262,7 +262,7 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
                   onClick={() => {
                     deleteTag(tag.id, productInfo?.id);
                   }}
-                  className="flex-none pr-[0.3rem] text-center text-bold hover:poiter"
+                  className="flex-none  text-slate-500  text-center text-bold hover:cursor-pointer hover:text-slate-900"
                 >
                   x
                 </span>
