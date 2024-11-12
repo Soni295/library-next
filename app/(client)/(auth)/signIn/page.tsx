@@ -55,7 +55,7 @@ export default function SignUpPage() {
   });
 
   return (
-    <div className="flex justify-center items-center h-screen">
+    <div className="h-[calc(100vh-7rem)] flex flex-grow justify-center items-center">
       <form
         className="w-96 p-6 shadow-lg bg-white rounded-md"
         onSubmit={onSubmit}
@@ -98,7 +98,6 @@ export default function SignUpPage() {
             },
           })}
         />
-
         <InputForm
           label="Contraseña:"
           type="password"

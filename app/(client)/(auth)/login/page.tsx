@@ -37,7 +37,7 @@ export default function LoginPage() {
   });
 
   return (
-    <div className="h-[calc(100vh-7rem)] flex justify-center items-center">
+    <div className="h-[calc(100vh-7rem)] flex flex-grow justify-center items-center">
       <form
         onSubmit={onSubmit}
         className="w-96 p-6 shadow-lg bg-white rounded-md"
