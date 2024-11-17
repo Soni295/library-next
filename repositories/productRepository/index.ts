@@ -103,22 +103,34 @@ export class ProductRepository {
 
   async getTagsProductsByFilter({ text = '' }: SearchFilterProductStock) {
     const info = await prisma.category.findMany({
-      where: {
+      include: {
         tags: {
-          some: {
+          select: { id: true, name: true },
+          where: {
             productTag: { some: { product: { name: { contains: text } } } },
           },
         },
       },
+      where: {
+        tags: {
+          some: {
+            productTag: {
+              some: {
+                product: { name: { contains: text } },
+              },
+            },
+          },
+        },
+      },
     });
-    console.log(info);
+    return info;
   }
 
   async getProductsByFilter({
     page = 1,
     pageSize = 20,
     text = '',
-  }: SearchFilterProductStock): Promise<ProductPage> {
+  }: SearchFilterProductStock) {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
 

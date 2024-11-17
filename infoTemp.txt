@@ -16,3 +16,9 @@ Agregar la pagina del producto :3
 	Agregar las compras realizadas, un filtro por usuario y orden por tiempo
 	y que se pueda modificar la compra con una notificacion que fue modificada en 
 	todo caso.
+
+/search
+	agregar para que filtre por tags.	
+
+/home
+	agregar paginador.

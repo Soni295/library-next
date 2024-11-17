@@ -181,6 +181,10 @@ export class ProductController extends GeneralController {
   ) {
     const productPage =
       await this.productRepository.getProductsByFilter(pageSearchFilter);
+    const categories = await this.productRepository.getTagsProductsByFilter({
+      text: pageSearchFilter.text,
+    });
+
     const { data, ...rest } = productPage;
 
     const info = data.map((product) => ({
@@ -194,6 +198,7 @@ export class ProductController extends GeneralController {
       ...rest,
       data: {
         info,
+        categories,
       },
     };
   }
