@@ -3,6 +3,8 @@ export const TypesCompose = {
   userRepo: Symbol.for('userRepository'),
   productCtrl: Symbol.for('productController'),
   productRepo: Symbol.for('productRepository'),
+  productClientCtrl: Symbol.for('productClientController'),
+  productClientRepo: Symbol.for('productClientRepository'),
   markCtrl: Symbol.for('markController'),
   markRepo: Symbol.for('markRepository'),
   orderCtrl: Symbol.for('orderController'),

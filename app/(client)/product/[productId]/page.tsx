@@ -1,39 +1,42 @@
-import { productCtrl } from '@/app/lib/compose/inversify';
+import { productClientCtrl, productCtrl } from '@/app/lib/compose/inversify';
 import { SearchParams } from '@/app/lib/definitions/SearchParams';
 import { CardAction } from './component';
 import { DeleteBtn } from '@/app/ui/input/DeleteBtn';
+import { NotFoundProductPage } from './notFoundPage';
 
 export default async function Page(searchParams: SearchParams) {
   const { productId } = searchParams.params;
   const id = Number(productId);
-  if (!productId || Number.isNaN(id)) return <div>Producto no encontrado</div>;
+  if (!productId || Number.isNaN(id)) return <NotFoundProductPage />;
 
-  const product = await productCtrl.getById(id);
-  if (!product) return <div>Producto no encontrado</div>;
+  const product = await productClientCtrl.getById(id);
+  if (!product) return <NotFoundProductPage />;
 
+  const addProduct = () => {
+    console.log({ productId });
+  };
+  console.log(product);
   return (
-    <div className="m-auto my-[5rem] w-[900px] h-[500px] grid grid-cols-3 bg-red-200 rounded-lg">
+    <div className="m-auto mx-[1.5rem] p-[0.75rem] h-full w-full grid grid-cols-3 bg-red-100 rounded">
       <img
-        className="object-cover h-[100%] w-[350px] rounded-l-lg"
+        className="object-cover ml-[2rem] h-[20rem] w-[20rem] rounded-sm"
         src={product.photo}
         alt={product.name}
       />
+      <div className="col-span-2 ml-[9rem] mx-8">
+        <p className="text-3xl mt-[0.7rem] font-semibold">{product.name}</p>
+        <p>{product.description}</p>
+        <p className="text-xl font-medium">$ {product.basePrice.toFixed(2)}</p>
 
-      <div className="col-span-2 mx-8">
-        <div className="mt-8">
-          <p className="text-2xl my-8 text-center font-semibold">
-            {product.name}
-          </p>
-          <p>{product.description}</p>
-          <p className="text-xl font-medium">
-            $ {product.basePrice.toFixed(2)}
-          </p>
-          <CardAction id={product.id} />
-          <DeleteBtn text="Quitar de la lista " />
-        </div>
+        <CardAction id={product.id} />
+        <button onClick={}>Agregar</button>
+        <DeleteBtn text="Quitar de la lista " />
       </div>
     </div>
   );
+}
+function AddProductBtn() {
+  return <></>;
 }
 
 // <CardAction id={product.id} />

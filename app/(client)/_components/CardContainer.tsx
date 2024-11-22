@@ -4,7 +4,7 @@ export function CardConteiner({ elements }: CardContainerProps) {
   if (!elements || elements.length === 0) return <ProductsNotFound />;
 
   return (
-    <div className="grid gap-4 w-full mt-8 mx-[1rem] md:mx-[2rem] justify-items-center grid-cols-[repeat(auto-fill,minmax(15rem,1fr))]">
+    <div className="mt-[8rem] grid gap-4 w-full mt-8 mx-[0.5rem] md:mx-[2rem] justify-items-center grid-cols-[repeat(auto-fill,minmax(15rem,1fr))]">
       {elements.map((element) => (
         <Card key={element.id} {...element} />
       ))}

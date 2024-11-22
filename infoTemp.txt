@@ -10,6 +10,9 @@ Agregar la pagina del producto :3
 	Agregar el No encontrado en caso de no encontrar el producto.
 	Agregar el boton para agregar un producto.
 	Agregar para actualizar el contador del producto.
+	Que sea responsivo el producto.
+	QUe cuando aparesca en el producto y si lo tengo en el carrito me mueste como 
+	que puedo agregar mas.
 
 
 /dash/purchase
@@ -22,3 +25,5 @@ Agregar la pagina del producto :3
 
 /home
 	agregar paginador.
+	agregar un slider para que se vea un touch mas bonito(opcional).
+	ver lo que las imagenes estan muy grandes en mobile

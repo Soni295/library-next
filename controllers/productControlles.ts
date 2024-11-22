@@ -1,5 +1,8 @@
 import { inject, injectable } from 'inversify';
-import { type ProductRepository } from '@/repositories/productRepository';
+import {
+  ProductClientRepository,
+  type ProductRepository,
+} from '@/repositories/productRepository';
 import { Product } from '@prisma/client';
 import {
   ProductCreateInputSchema,
@@ -201,5 +204,20 @@ export class ProductController extends GeneralController {
         categories,
       },
     };
+  }
+}
+
+@injectable()
+export class ProductControllerClient {
+  constructor(
+    @inject(TypesCompose.productClientRepo)
+    private readonly productRepository: ProductClientRepository,
+  ) {}
+
+  async getById(id: number) {
+    const product = await this.productRepository.getById({ id });
+
+    if (product == null) return null;
+    return { ...product, basePrice: product.basePrice.toNumber() };
   }
 }

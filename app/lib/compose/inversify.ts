@@ -2,11 +2,17 @@ import 'reflect-metadata';
 import { Container } from 'inversify';
 import { TypesCompose } from '.';
 import { UserController } from '@/controllers/userController';
-import { ProductController } from '@/controllers/productControlles';
+import {
+  ProductController,
+  ProductControllerClient,
+} from '@/controllers/productControlles';
 import { MarkController } from '@/controllers/markController';
 import { OrderController } from '@/controllers/orderController';
 import { UserRepository } from '@/repositories/userRepository';
-import { ProductRepository } from '@/repositories/productRepository';
+import {
+  ProductRepository,
+  ProductClientRepository,
+} from '@/repositories/productRepository';
 import { MarkRepository } from '@/repositories/markRepository';
 import { OrderRepository } from '@/repositories/orderRepository';
 import { CategoryRepository } from '@/repositories/categoryRepository';
@@ -27,6 +33,10 @@ container
   .bind<CategoryController>(TypesCompose.categoryCtrl)
   .to(CategoryController);
 
+container
+  .bind<ProductControllerClient>(TypesCompose.productClientCtrl)
+  .to(ProductControllerClient);
+
 container.bind<UserRepository>(TypesCompose.userRepo).to(UserRepository);
 container
   .bind<ProductRepository>(TypesCompose.productRepo)
@@ -38,9 +48,16 @@ container
   .to(CategoryRepository);
 
 container.bind<TagRepository>(TypesCompose.tagRepo).to(TagRepository);
+container
+  .bind<ProductClientRepository>(TypesCompose.productClientRepo)
+  .to(ProductClientRepository);
 
 export const productCtrl = container.get<ProductController>(
   TypesCompose.productCtrl,
+);
+
+export const productClientCtrl = container.get<ProductControllerClient>(
+  TypesCompose.productClientCtrl,
 );
 
 export const tagCtrl = container.get<TagController>(TypesCompose.tagCtrl);
