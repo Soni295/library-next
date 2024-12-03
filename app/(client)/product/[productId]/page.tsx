@@ -1,10 +1,12 @@
-import { productClientCtrl, productCtrl } from '@/app/lib/compose/inversify';
+import { productClientCtrl } from '@/app/lib/compose/inversify';
 import { SearchParams } from '@/app/lib/definitions/SearchParams';
 import { CardAction } from './component';
-import { DeleteBtn } from '@/app/ui/input/DeleteBtn';
 import { NotFoundProductPage } from './notFoundPage';
+import { getSession } from '@/app/lib/session';
+import { send } from 'process';
 
 export default async function Page(searchParams: SearchParams) {
+  const session = await getSession();
   const { productId } = searchParams.params;
   const id = Number(productId);
   if (!productId || Number.isNaN(id)) return <NotFoundProductPage />;
@@ -12,25 +14,19 @@ export default async function Page(searchParams: SearchParams) {
   const product = await productClientCtrl.getById(id);
   if (!product) return <NotFoundProductPage />;
 
-  const addProduct = () => {
-    console.log({ productId });
-  };
-  console.log(product);
   return (
-    <div className="m-auto mx-[1.5rem] p-[0.75rem] h-full w-full grid grid-cols-3 bg-red-100 rounded">
+    <div className="m-auto p-[0.75rem] h-[calc(full-0.5rem)] w-[calc(full-0.5rem)] grid grid-cols-1 bg-slate-100 md:grid-cols-3 rounded">
       <img
-        className="object-cover ml-[2rem] h-[20rem] w-[20rem] rounded-sm"
+        className="object-cover m-[auto] md:ml-[2rem] h-[calc(100%-0.5rem)] w-[calc(100%-0.5rem)] rounded-sm"
         src={product.photo}
         alt={product.name}
       />
-      <div className="col-span-2 ml-[9rem] mx-8">
+      <div className="col-span-2 md:ml-[9rem] mx-8">
         <p className="text-3xl mt-[0.7rem] font-semibold">{product.name}</p>
         <p>{product.description}</p>
         <p className="text-xl font-medium">$ {product.basePrice.toFixed(2)}</p>
 
-        <CardAction id={product.id} />
-        <button onClick={}>Agregar</button>
-        <DeleteBtn text="Quitar de la lista " />
+        <CardAction productId={product.id} userId={session?.id} />
       </div>
     </div>
   );

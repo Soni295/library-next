@@ -15,15 +15,24 @@ export type MaybeFullOrder = Maybe<
 
 @injectable()
 export class OrderRepository {
-  async getSelectionOrderByUserId({ id }: UserId): Promise<MaybeFullOrder> {
+  async getSelectionOrderByUserId({ id }: UserId) {
+    return await prisma.order.findFirst({
+      where: { customerId: id, status: 'Selection' },
+    });
+  }
+
+  async getSelectionFullOrderByUserId({ id }: UserId) {
     return await prisma.order.findFirst({
       where: { customerId: id, status: 'Selection' },
       include: { orderItems: true },
     });
   }
 
-  async createOrderByUserId({ id }: UserId): Promise<MaybeOrder> {
-    return await prisma.order.create({ data: { customerId: id } });
+  async createOrderByUserId({ id }: UserId) {
+    return await prisma.order.create({
+      data: { customerId: id },
+      include: { orderItems: true },
+    });
   }
 
   async ConfirmOrderByOrderId({ id }: OrderId): Promise<MaybeOrder> {
@@ -33,7 +42,46 @@ export class OrderRepository {
     });
   }
 
-  async AddProduct({ id }: UserId, product: ProductPrisma) {
-    const order = await prisma.order.findFirst({ where: { customerId: id } });
+  async addProduct({
+    orderId,
+    productId,
+    quantity,
+  }: {
+    orderId: number;
+    productId: number;
+    quantity: number;
+  }) {
+    const where = { id: orderId };
+
+    const order = await prisma.order.findFirst({
+      where,
+      include: { orderItems: true },
+    });
+
+    const updatedAt = new Date();
+    const item = order?.orderItems.find((item) => item.productId == productId);
+    if (!item) {
+      return await prisma.order.update({
+        where: { id: orderId },
+        data: {
+          orderItems: { create: [{ productId, quantity: quantity }] },
+          updateAt: updatedAt,
+        },
+      });
+    }
+    item.quantity += quantity;
+
+    return prisma.order.update({
+      where,
+      data: {
+        updateAt: updatedAt,
+        orderItems: {
+          update: {
+            where: { id: item.id },
+            data: { quantity: item.quantity, updatedAt: updatedAt },
+          },
+        },
+      },
+    });
   }
 }

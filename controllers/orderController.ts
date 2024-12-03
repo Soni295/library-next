@@ -20,35 +20,49 @@ export class OrderController {
     userId: number;
     productId: number;
     quantity: number;
-  }) {}
-
-  async getSelectionOrderByUserId({ id }: { id: number }) {
-    const order = await this.orderRepository.getSelectionOrderByUserId({ id });
+  }) {
+    let order = await this.orderRepository.getSelectionFullOrderByUserId({
+      id: userId,
+    });
 
     if (!order) {
-      return this.orderRepository.createOrderByUserId({ id });
+      order = await this.orderRepository.createOrderByUserId({ id: userId });
     }
-
-    if (!Array.isArray(order.orderItems)) {
-      return order;
-    }
-
-    if (order.orderItems.length === 0) {
-      return order;
-    }
-
-    const products = await this.getterManyProducts.getManyById(
-      order.orderItems,
-    );
-
-    console.log({
+    await this.orderRepository.addProduct({
       orderId: order.id,
-      products: products?.map((p) => ({
-        id: p.id,
-        name: p.name,
-        a: p.quantity,
-      })),
+      productId,
+      quantity,
     });
-    return {};
   }
+  /*
+	async getSelectionOrderByUserId({ id }: { id: number }) {
+		const order = await this.orderRepository.getSelectionOrderByUserId({ id });
+
+		if (!order) {
+			return this.orderRepository.createOrderByUserId({ id });
+		}
+
+		if (!Array.isArray(order.orderItems)) {
+			return order;
+		}
+
+		if (order.orderItems.length === 0) {
+			return order;
+		}
+
+		const products = await this.getterManyProducts.getManyById(
+			order.orderItems,
+		);
+
+		console.log({
+			orderId: order.id,
+			products: products?.map((p) => ({
+				id: p.id,
+				name: p.name,
+				a: p.quantity,
+			})),
+		});
+		return {};
+	}
+	*/
 }
