@@ -3,16 +3,19 @@
 import { useRouter } from 'next/navigation';
 import { useInputNumber } from '@/app/lib/customHooks/useInputNumber';
 import { DeleteBtn } from '@/app/ui/input/DeleteBtn';
-import { addProductAction } from './action';
+import { addProductAction, deleteProductAction } from './action';
 import { CLIENT_PATH } from '@/app/lib/paths';
+import { toastSuccess } from '@/app/ui/toast';
 
 interface CardActionProps {
   productId: number;
   userId?: number;
+  name: string;
 }
-export function CardAction({ productId, userId }: CardActionProps) {
+
+export function CardAction({ productId, userId, name }: CardActionProps) {
   const { handleDecrement, handleIncrement, quantity, handleChange } =
-    useInputNumber();
+    useInputNumber(1);
   const router = useRouter();
 
   const addProduct = async () => {
@@ -21,9 +24,19 @@ export function CardAction({ productId, userId }: CardActionProps) {
       return;
     }
     const a = await addProductAction({ productId, userId, quantity });
+
+    const msg = quantity === 1 ? 'elemento' : 'elementos';
+    toastSuccess(`Se han agregado ${quantity} ${msg} a la canasta.`);
+    console.log(a);
   };
+
   const deleteAction = () => {
-    console.log('borrado', { productId, userId });
+    if (!userId) {
+      router.push(CLIENT_PATH.SIGN_IN);
+      return;
+    }
+    const a = deleteProductAction({ productId, userId });
+    toastSuccess(`Se quito ${name} de la canasta.`);
   };
 
   return (
@@ -34,7 +47,7 @@ export function CardAction({ productId, userId }: CardActionProps) {
           <input
             className="w-[2.7rem] text-xl px-2 py-1 text-center border-t border-b border-gray-300 focus:outline-none"
             type="number"
-            min="0"
+            min="1"
             value={quantity}
             onChange={handleChange}
           />
@@ -46,7 +59,7 @@ export function CardAction({ productId, userId }: CardActionProps) {
         >
           Agregar
         </button>
-        <DeleteBtn text="Quitar de la lista " onClick={deleteAction} />
+        <DeleteBtn text="Quitar de la lista" onClick={deleteAction} />
       </div>
     </div>
   );
