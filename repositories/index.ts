@@ -23,6 +23,7 @@ export interface SearchFilterByText extends PageSearchBasic {
 export interface SearchFilterProductStock extends PageSearchBasic {
   text?: string;
   tagsIds?: number[];
+  available?: boolean;
 }
 
 export interface SearchFilterCategory extends PageSearchBasic {

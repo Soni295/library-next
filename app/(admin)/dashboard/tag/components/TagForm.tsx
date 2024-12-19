@@ -72,7 +72,6 @@ export function TagForm({ categories = [], tag }: TagFormProps) {
   const fieldStyle = 'flex-1 py-[0.1em] rounded-lg pl-[0.5rem] text-sm';
 
   const handleChange = async (e: ChangeEv) => {
-    console.log(e.target.name, e.target.value);
     setState((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 

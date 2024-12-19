@@ -12,6 +12,10 @@ export class OrderController {
     private readonly getterManyProducts: ProductRepository,
   ) {}
 
+  async getOrdenByUserId({ id }: { id: number }) {
+    return this.orderRepository.getSelectionOrderByUserId({ id });
+  }
+
   async addItem({
     userId,
     productId,
@@ -28,12 +32,33 @@ export class OrderController {
     if (!order) {
       order = await this.orderRepository.createOrderByUserId({ id: userId });
     }
-    await this.orderRepository.addProduct({
+    return await this.orderRepository.addItem({
       orderId: order.id,
       productId,
       quantity,
     });
   }
+
+  async removeItem({
+    userId,
+    productId,
+  }: {
+    userId: number;
+    productId: number;
+  }) {
+    let order = await this.orderRepository.getSelectionFullOrderByUserId({
+      id: userId,
+    });
+
+    if (!order) {
+      order = await this.orderRepository.createOrderByUserId({ id: userId });
+    }
+    return await this.orderRepository.removeItem({
+      orderId: order.id,
+      productId,
+    });
+  }
+
   /*
 	async getSelectionOrderByUserId({ id }: { id: number }) {
 		const order = await this.orderRepository.getSelectionOrderByUserId({ id });

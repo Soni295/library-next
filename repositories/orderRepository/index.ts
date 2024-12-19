@@ -18,6 +18,21 @@ export class OrderRepository {
   async getSelectionOrderByUserId({ id }: UserId) {
     return await prisma.order.findFirst({
       where: { customerId: id, status: 'Selection' },
+      include: {
+        orderItems: {
+          include: {
+            product: {
+              select: {
+                id: true,
+                name: true,
+                description: true,
+                photo: true,
+                basePrice: true,
+              },
+            },
+          },
+        },
+      },
     });
   }
 
@@ -42,7 +57,20 @@ export class OrderRepository {
     });
   }
 
-  async addProduct({
+  async removeItem({
+    orderId,
+    productId,
+  }: {
+    orderId: number;
+    productId: number;
+  }) {
+    const d = await prisma.orderItem.deleteMany({
+      where: { orderId, productId },
+    });
+    return d;
+  }
+
+  async addItem({
     orderId,
     productId,
     quantity,
@@ -73,6 +101,7 @@ export class OrderRepository {
 
     return prisma.order.update({
       where,
+      include: { orderItems: true },
       data: {
         updateAt: updatedAt,
         orderItems: {

@@ -9,6 +9,7 @@ export const CLIENT_PATH = {
   SEARCH: '/search',
   PRODUCT: '/product',
   CART: '/cart',
+  CART_HISTORY: '/cart/history',
 } as const;
 
 export const DASHBOARD_PATH = {

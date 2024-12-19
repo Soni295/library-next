@@ -49,7 +49,7 @@ export class MarkController extends GeneralController {
       await this.markRepository.create(validatedMark.data);
     } catch (err) {
       if (err instanceof PrismaClientValidationError) {
-        console.log('alto error PrismaClientValidationError', err.message);
+        console.error('alto error PrismaClientValidationError', err.message);
       }
 
       if (err instanceof Error) {

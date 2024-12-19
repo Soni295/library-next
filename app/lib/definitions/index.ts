@@ -3,10 +3,11 @@ import { ChangeEvent, FormEvent } from 'react';
 export interface Props {
   children?: React.ReactNode;
 }
-
+/*
 export interface PropsWithIsMobile extends Props {
   isMobile?: boolean;
 }
+*/
 
 export interface PropsWithClassName extends Props {
   className?: string;

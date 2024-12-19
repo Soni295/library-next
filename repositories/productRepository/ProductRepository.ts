@@ -51,7 +51,6 @@ export class ProductRepository {
     productId: number;
     tagId: number;
   }): Promise<void> {
-    console.log({ productId, tagId });
     await prisma.productTag.deleteMany({
       where: { tagId, productId },
     });
@@ -124,11 +123,13 @@ export class ProductRepository {
     page = 1,
     pageSize = 20,
     text = '',
+    available = true,
   }: SearchFilterProductStock) {
     const skip = (page - 1) * pageSize;
     const take = pageSize;
 
     const where = {
+      enable: available,
       OR: [{ name: { contains: text } }],
     };
 

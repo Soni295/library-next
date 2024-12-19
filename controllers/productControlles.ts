@@ -75,9 +75,8 @@ export class ProductController extends GeneralController {
       await this.productRepository.update(validatedProduct.data);
     } catch (err) {
       if (err instanceof PrismaClientValidationError) {
-        console.log('alto error PrismaClientValidationError', err.message);
+        console.error('alto error PrismaClientValidationError', err.message);
       }
-      console.log(err);
 
       if (err instanceof Error) {
         return {
@@ -127,7 +126,7 @@ export class ProductController extends GeneralController {
       const tagIds = JSON.parse(formData.get('tagIds') as string) as {
         id: number;
       }[];
-      console.log(tagIds);
+
       const mark = formData.get('mark');
       const validatedProduct = ProductCreateInputSchema.safeParse({
         name: formData.get('name'),
