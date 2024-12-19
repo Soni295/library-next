@@ -1,14 +1,16 @@
-import { productClientCtrl } from '@/app/lib/compose/inversify';
+import { orderCtrl, productClientCtrl } from '@/app/lib/compose/inversify';
 import { SearchParams } from '@/app/lib/definitions/SearchParams';
 import { CardAction } from './component';
 import { NotFoundProductPage } from './notFoundPage';
 import { getSession } from '@/app/lib/session';
-import { send } from 'process';
+import clsx from 'clsx';
 
 export default async function Page(searchParams: SearchParams) {
   const session = await getSession();
   const { productId } = searchParams.params;
   const id = Number(productId);
+  const a = await orderCtrl.getOrdenByUserId({ id: session?.id as number });
+
   if (!productId || Number.isNaN(id)) return <NotFoundProductPage />;
 
   const product = await productClientCtrl.getById(id);
@@ -26,13 +28,41 @@ export default async function Page(searchParams: SearchParams) {
         <p>{product.description}</p>
         <p className="text-xl font-medium">$ {product.basePrice.toFixed(2)}</p>
 
-        <CardAction productId={product.id} userId={session?.id} />
+        <CardAction
+          name={product.name}
+          productId={product.id}
+          userId={session?.id}
+        />
       </div>
     </div>
   );
 }
 function AddProductBtn() {
   return <></>;
+}
+
+function ProductImg({ src, name }: { src: string; name: string }) {
+  const imgNotFoundStyle = clsx(
+    'h-full w-full',
+    'flex items-center justify-center',
+    'bg-slate-100 text-slate-400',
+    'border-[0.1rem] border-[#d5f6fb] rounded-sm',
+  );
+
+  if (!src)
+    return (
+      <div className={imgNotFoundStyle}>
+        <div>Imagen no disponible</div>
+      </div>
+    );
+
+  return (
+    <img
+      className="object-cover m-[auto] md:ml-[2rem] h-[calc(100%-0.5rem)] w-[calc(100%-0.5rem)] rounded-sm"
+      src={src}
+      alt={name}
+    />
+  );
 }
 
 // <CardAction id={product.id} />
