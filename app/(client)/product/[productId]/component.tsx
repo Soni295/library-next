@@ -3,13 +3,14 @@
 import { useRouter } from 'next/navigation';
 import { useInputNumber } from '@/app/lib/customHooks/useInputNumber';
 import { DeleteBtn } from '@/app/ui/input/DeleteBtn';
-import { addProductAction } from './action';
+import { addProductAction, deleteProductAction } from './action';
 import { CLIENT_PATH } from '@/app/lib/paths';
 
 interface CardActionProps {
   productId: number;
   userId?: number;
 }
+
 export function CardAction({ productId, userId }: CardActionProps) {
   const { handleDecrement, handleIncrement, quantity, handleChange } =
     useInputNumber();
@@ -21,9 +22,14 @@ export function CardAction({ productId, userId }: CardActionProps) {
       return;
     }
     const a = await addProductAction({ productId, userId, quantity });
+    console.log(a);
   };
   const deleteAction = () => {
-    console.log('borrado', { productId, userId });
+    if (!userId) {
+      router.push(CLIENT_PATH.SIGN_IN);
+      return;
+    }
+    deleteProductAction({ productId, userId });
   };
 
   return (
@@ -46,7 +52,7 @@ export function CardAction({ productId, userId }: CardActionProps) {
         >
           Agregar
         </button>
-        <DeleteBtn text="Quitar de la lista " onClick={deleteAction} />
+        <DeleteBtn text="Quitar de la lista" onClick={deleteAction} />
       </div>
     </div>
   );
