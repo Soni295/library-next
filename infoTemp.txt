@@ -11,18 +11,22 @@ Agregar la pagina del producto :3
 	[]Agregar el boton para agregar un producto.
 	Agregar para actualizar el contador del producto.
 	Que sea responsivo el producto.
-	QUe cuando aparesca en el producto y si lo tengo en el carrito me mueste como 
+	QUe cuando aparesca en el producto y si lo tengo en el carrito me mueste como
 	que puedo agregar mas.
 	Agregar descripcion al producto
-	
+    [] Agregarle un trim en la descripcion de los productos, por que (mas bien
+    un limite de lineas)
+
+/cart/
+   [] Agregar un trim a la descripcion del producto.
 
 /dash/purchase
 	Agregar las compras realizadas, un filtro por usuario y orden por tiempo
-	y que se pueda modificar la compra con una notificacion que fue modificada en 
+	y que se pueda modificar la compra con una notificacion que fue modificada en
 	todo caso.
 
 /search
-	agregar para que filtre por tags.	
+	agregar para que filtre por tags.
 
 /home
 	agregar paginador.
@@ -31,3 +35,13 @@ Agregar la pagina del producto :3
 
 /Sign-up
 	Revisar que te envie a la pagina anterior
+
+
+admin:
+/producto/create
+    Al momento de crear si el producto no esta activo no aparece en la pantalla.
+    de la lista de productos.
+    Tambien estaria bueno tener el boton crear y redirigir a la lista o de crear
+    y poder guardar el estado para crear una copia.
+/product/update
+    No me deja actualizar el precio y me tira un error de la foto.
