@@ -9,6 +9,7 @@ import { InputForm } from '@/app/ui/input/inputForm';
 import { ResError } from '@/app/lib/definitions/response';
 import { signIn } from 'next-auth/react';
 import { CLIENT_PATH } from '@/app/lib/paths';
+import { revalidatePath } from 'next/cache';
 
 const defaultValues = {
   name: '',
@@ -41,6 +42,7 @@ export default function SignUpPage() {
         toast.error(sign.error, { className: 'bg-red-300', duration: 3000 });
         return;
       }
+      revalidatePath(CLIENT_PATH.HOME, 'layout');
       router.push(CLIENT_PATH.HOME);
     } catch (err) {
       if (err instanceof AxiosError) {

@@ -33,8 +33,7 @@ export default function LoginPage() {
       toast.error(result.error, { className: 'bg-red-300', duration: 3000 });
       return;
     }
-    router.back();
-    //router.push(CLIENT_PATH.HOME);
+    router.push(CLIENT_PATH.HOME);
   });
 
   return (

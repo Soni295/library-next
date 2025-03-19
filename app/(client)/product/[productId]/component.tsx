@@ -50,27 +50,29 @@ export function CardAction({ productId, userId, name }: CardActionProps) {
   };
 
   return (
-    <div className="grid items-center py-2">
-      <div className="grid items-center">
-        <div className="flex items-center">
-          <ActionBtn onClick={handleDecrement} placeholder="-" />
-          <input
-            className="w-[2.7rem] text-xl px-2 py-1 text-center border-t border-b border-gray-300 focus:outline-none"
-            type="number"
-            min="1"
-            value={quantity}
-            onChange={handleChange}
-          />
-          <ActionBtn onClick={handleIncrement} placeholder="+" />
-        </div>
-        <button
-          className="bg-red-400 m-auto mt-[1rem] px-[2rem] py-[0.1rem] rounded-xl cursor-pointer"
-          onClick={addProduct}
-        >
-          Agregar
-        </button>
-        <DeleteBtn text="Quitar de la lista" onClick={deleteAction} />
-      </div>
+    <div className="flex items-center py-2 mt-[5rem]">
+      <button
+        className="bg-green-300 w-[10rem] m-auto h-[2rem]  px-[2rem] py-[0.1rem] rounded-xl cursor-pointer"
+        onClick={addProduct}
+      >
+        Agregar
+      </button>
+      <ActionBtn onClick={handleDecrement} placeholder="-" />
+      <input
+        className="w-[2.7rem] text-xl px-2 py-1 text-center border-t border-b border-gray-300 focus:outline-none"
+        type="number"
+        min="1"
+        value={quantity}
+        onChange={handleChange}
+      />
+      <ActionBtn onClick={handleIncrement} placeholder="+" />
+
+      <button
+        className="bg-red-300 w-[10rem] h-[2rem] m-auto px-[1rem] py-[0.1rem] rounded-xl cursor-pointer"
+        onClick={deleteAction}
+      >
+        Quitar
+      </button>
     </div>
   );
 }

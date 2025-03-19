@@ -4,6 +4,8 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { LoginInputSchema } from '@/app/lib/definitions/user';
 import { ServerErr } from '@/app/lib/errors/serverErr';
 import { userCtrl } from '@/app/lib/compose/inversify';
+import { revalidatePath } from 'next/cache';
+import { CLIENT_PATH } from '@/app/lib/paths';
 
 const authOptions = {
   providers: [
@@ -31,6 +33,8 @@ const authOptions = {
         if (result instanceof ServerErr) {
           throw new Error(result.desc);
         }
+
+        revalidatePath(CLIENT_PATH.HOME, 'layout');
         return {
           email: result.email,
           name: result.name,
