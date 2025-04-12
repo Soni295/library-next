@@ -35,6 +35,8 @@ Agregar la pagina del producto :3
 
 /Sign-up
 	Revisar que te envie a la pagina anterior
+/Sign-In
+	Revisar que te envie a la pagina anterior
 
 
 admin:
@@ -45,3 +47,8 @@ admin:
     y poder guardar el estado para crear una copia.
 /product/update
     No me deja actualizar el precio y me tira un error de la foto.
+
+
+// estoy arreglando los estilos de la pag principal
+// la logica de busqueda
+// la logica de compra
