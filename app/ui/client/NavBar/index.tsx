@@ -8,6 +8,7 @@ import clsx from 'clsx';
 export async function Navbar() {
   const session = await getSession();
 
+  console.log({ session });
   const className = clsx(
     'flex',
     'h-[2.5rem] w-screen px-[1rem]',

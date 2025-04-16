@@ -1,7 +1,6 @@
 'use client';
 
 import axios, { AxiosError } from 'axios';
-import { useFormStatus } from 'react-dom';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
@@ -10,6 +9,10 @@ import { ResError } from '@/app/lib/definitions/response';
 import { signIn } from 'next-auth/react';
 import { CLIENT_PATH } from '@/app/lib/paths';
 import { revalidatePath } from 'next/cache';
+import { useState } from 'react';
+import { toastErr, toastSuccess } from '@/app/ui/toast';
+import clsx from 'clsx';
+import { Spinner } from '@/app/ui/spinner';
 
 const defaultValues = {
   name: '',
@@ -17,6 +20,7 @@ const defaultValues = {
   password: '',
   confirmPassword: '',
 };
+type requestState = 'IDLE' | 'Loading' | 'Ok';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -27,8 +31,10 @@ export default function SignUpPage() {
   } = useForm({
     defaultValues,
   });
+  const [status, setStatus] = useState<requestState>('IDLE');
 
   const onSubmit = handleSubmit(async (data) => {
+    setStatus('Loading');
     try {
       await axios.post('/api/auth/signUp', { ...data });
 
@@ -42,15 +48,15 @@ export default function SignUpPage() {
         toast.error(sign.error, { className: 'bg-red-300', duration: 3000 });
         return;
       }
-      revalidatePath(CLIENT_PATH.HOME, 'layout');
+
+      toastSuccess('se ha creado exitosamente');
+      setStatus('Ok');
+      //revalidatePath(CLIENT_PATH.HOME, 'layout');
       router.push(CLIENT_PATH.HOME);
     } catch (err) {
       if (err instanceof AxiosError) {
         const data = err.response?.data as ResError;
-        toast.error(data.errors[0].desc, {
-          className: 'bg-red-300',
-          duration: 3000,
-        });
+        toastErr(data.errors[0].desc);
       }
       return;
     }
@@ -140,21 +146,32 @@ export default function SignUpPage() {
             },
           })}
         />
-        <div>
-          <SignInButton />
+        <div className="flex justify-center mt-5">
+          <SignInButton status={status} />
         </div>
       </form>
     </div>
   );
 }
 
-function SignInButton() {
-  const { pending } = useFormStatus();
+function SignInButton({ status }: { status: requestState }) {
+  const disable = status == 'Loading';
+
+  const className = clsx(
+    'border-2',
+    'border-indigo-700 bg-indigo-700',
+    'text-white',
+    'rounded-lg',
+    'py-1 px-5 w-full mt-3',
+  );
+
+  if (disable) return <Spinner />;
 
   return (
     <input
-      aria-disabled={pending}
-      className="border-2 border-indigo-700 bg-indigo-700 text-white py-1 px-5 w-full mt-3 rounded-lg"
+      aria-disabled={disable}
+      disabled={disable}
+      className={className}
       type="submit"
       value="Registrarse"
     />

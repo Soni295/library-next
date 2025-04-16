@@ -35,9 +35,15 @@ Agregar la pagina del producto :3
 
 /Sign-up
 	Revisar que te envie a la pagina anterior
+    poner un loading para demostrar que esta cargando
+    arreglar para que se bloquee el boton de registro cuando esta cargando
 /Sign-In
 	Revisar que te envie a la pagina anterior
-
+****
+(observasion)
+posiblemente tenga que bajar dos niveles el layout principar y no devolver nada
+en cualquer ruta que tenga dashboard de por medio.
+****
 
 admin:
 /producto/create
