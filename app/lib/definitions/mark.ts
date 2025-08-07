@@ -1,6 +1,8 @@
 import { Prisma } from '@prisma/client';
 import z from 'zod';
 
+const id = z.number();
+
 const name = z
   .string({ message: 'El nombre es necesario' })
   .trim()
@@ -19,3 +21,11 @@ export const MarkCreateSchema = z.object({
   enable,
 }) satisfies z.Schema<Prisma.MarkCreateInput>;
 export type MarkCreate = z.infer<typeof MarkCreateSchema>;
+
+export const MarkUpdateSchema = z.object({
+  id,
+  name,
+  icon,
+  enable,
+}) satisfies z.Schema<Prisma.MarkUpdateInput>;
+export type MarkUpdate = z.infer<typeof MarkUpdateSchema>;

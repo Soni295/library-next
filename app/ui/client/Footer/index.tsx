@@ -26,7 +26,7 @@ function InstagramIcon() {
   return (
     <Link href={INFO_STATIC.links.instagram} passHref legacyBehavior>
       <a target="_blank">
-        <Image src="/insta.png" alt="instagram" width="32" height="32" />
+        <Image src="/insta.png" alt="instagram" width={32} height={32} />
       </a>
     </Link>
   );

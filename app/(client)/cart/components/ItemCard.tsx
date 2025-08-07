@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { deleteProductAction } from '@/app/lib/actions';
 import { formatPrice } from '@/app/lib/utils/formatPrice';
 
@@ -13,8 +14,10 @@ export function ItemCard({
   return (
     <div className="flex items-center justify-between border-b border-gray-300 pb-4 mb-4">
       <div className="flex items-center gap-3">
-        <img
+        <Image
           src={photo}
+          width={10}
+          height={10}
           alt="Producto"
           className="w-10 h-10 md:w-20 md:h-20 object-cover rounded-lg"
         />

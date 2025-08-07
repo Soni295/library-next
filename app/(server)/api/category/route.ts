@@ -1,4 +1,4 @@
-import { categoryController } from '@/controllers/categoryController';
+import { categoryCtrl } from '@/app/lib/compose/inversify';
 import { CategoryId } from '@/app/lib/definitions/models/category';
 import { Category } from '@prisma/client';
 import { NextResponse, NextRequest } from 'next/server';
@@ -17,7 +17,7 @@ function successResponse(data: any, status: number) {
 export async function POST(req: NextRequest) {
   try {
     const data: Category = await req.json();
-    const category = await categoryController.save(data);
+    const category = await categoryCtrl.save(data);
     return successResponse({ category }, 201);
   } catch (err) {
     return handlerErr(err);
@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   try {
-    const categories = await categoryController.getAll();
+    const categories = await categoryCtrl.getAll();
     return successResponse({ categories }, 201);
   } catch (err) {
     return handlerErr(err);
@@ -36,7 +36,7 @@ export async function GET() {
 export async function PUT(req: NextRequest) {
   try {
     const data: Category = await req.json();
-    const category = await categoryController.update(data);
+    const category = await categoryCtrl.update(data);
     return successResponse({ category }, 201);
   } catch (err) {
     return handlerErr(err);
@@ -46,7 +46,7 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   try {
     const data: CategoryId = await req.json();
-    await categoryController.deleteById(data.id);
+    await categoryCtrl.deleteById(data.id);
     return successResponse(null, 200);
   } catch (err) {
     return handlerErr(err);
