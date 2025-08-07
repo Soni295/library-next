@@ -12,7 +12,7 @@ import { NotFound } from '@/app/ui/notFound';
 import { Pagination } from '@/app/ui/pagination';
 import { LoadingInfo } from '@/app/ui/loadingInfo';
 
-export function useMarkSearch() {
+function useMarkSearch() {
   const [info, setInfo] = useState<MarkPage & { state: string }>({
     data: [],
     page: 1,

@@ -87,7 +87,7 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
       const res = await createProductAction(form);
       if (res.status === '200')
         toastSuccess('El producto se creo exitosamente.');
-      if (res.status === '500') if (res.error) toastErr(res.error);
+      if (res.status === '500' && res.error) toastErr(res.error);
       return;
     }
     form.set('id', String(productInfo.id));

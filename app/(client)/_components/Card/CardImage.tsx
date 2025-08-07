@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import Image from 'next/image';
 import { CardImageProps } from './interfaces';
 
 export function CardImage({ photo, name }: CardImageProps) {
@@ -12,7 +13,7 @@ export function CardImage({ photo, name }: CardImageProps) {
   return (
     <div className="h-[95%] row-span-2">
       {photo ? (
-        <img
+        <Image
           className="object-cover h-[100%] w-[100%]"
           src={photo}
           alt={name}

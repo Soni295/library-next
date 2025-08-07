@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import prisma, { MarkPrisma } from '@/app/lib/db/prisma';
 import { Maybe } from '@/app/lib/definitions/general';
-import { MarkCreate } from '@/app/lib/definitions/mark';
+import { MarkCreate, MarkUpdate } from '@/app/lib/definitions/mark';
 
 export interface Page<T> {
   data: T[];
@@ -27,6 +27,17 @@ export class MarkRepository {
     return prisma.mark.findMany({ select: { id: true, name: true } }) || [];
   }
 
+  async update(mark: MarkUpdate): Promise<MaybeMark> {
+    return prisma.mark.update({
+      where: { id: mark.id },
+      data: {
+        name: mark.name,
+        enable: mark.enable,
+        icon: mark.icon,
+      },
+    });
+  }
+
   async create(mark: MarkCreate): Promise<MaybeMark> {
     return prisma.mark.create({ data: { ...mark } });
   }
@@ -45,8 +56,6 @@ export class MarkRepository {
       },
     });
   }
-
-  static async update() {}
 
   //static async deleteById() { }
   async getMarkByPage({
