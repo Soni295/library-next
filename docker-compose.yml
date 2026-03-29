@@ -1,15 +1,19 @@
 #version: '3.7'
 
 services:
-  mariadb:
-    container_name: example
-    image: mariadb:10.2.38-bionic
-    ports:
-      - 3306:${DB_PORT}
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
     env_file: .env
     environment:
-      MYSQL_USER: ${DB_USER}
-      MYSQL_PASSWORD: ${DB_PASS}
-      MARIADB_ROOT_PASSWORD: ${DB_PASS}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: library
+    ports:
+      - 5432:${DB_PORT}
     volumes:
-      - ./databases/mariadb:/var/lib/mysql:rw
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

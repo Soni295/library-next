@@ -4,6 +4,8 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
+		"init": "node ./app/lib/auth/authz.ts",
+    "seed": "ts-node prisma/seed.ts",
 		"build:db": "npx prisma format && npx prisma db push",
 		"build:files": "mkdir -p ./public/uploads/{products,marks}",
 		"build:next": "next build",
@@ -60,6 +62,6 @@
 		"tailwindcss": "^3.4.17",
 		"ts-jest": "^29.2.4",
 		"ts-node": "^10.9.2",
-		"typescript": "^5"
+		"typescript": "^5.9.2"
 	}
 }

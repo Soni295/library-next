@@ -16,17 +16,17 @@ export class ProductRepository {
     return await prisma.product.create({
       data: {
         name: product.name,
-        quantity: product.quantity,
-        minQuantity: product.minQuantity,
-        description: product.description,
-        code: product.code,
-        basePrice: product.basePrice,
-        enable: product.enable,
-        photo: product.photo,
+        //quantity: product.quantity,
+        //minQuantity: product.minQuantity,
+        //description: product.description,
+        //code: product.code,
+        //basePrice: product.basePrice,
+        //enable: product.enable,
+        //photo: product.photo,
         ...mark,
-        productTag: {
-          create: product.tagIds.map((t) => ({ tag: { connect: { id: t } } })),
-        },
+        //productTag: {
+        //  create: product.tagIds.map((t) => ({ tag: { connect: { id: t } } })),
+        //},
       },
     });
   }
@@ -38,7 +38,7 @@ export class ProductRepository {
     return await prisma.product.update({
       where: { id: info.productId },
       data: {
-        productTag: { create: [{ tagId: info.tagId }] },
+        //productTag: { create: [{ tagId: info.tagId }] },
         updateAt: new Date(),
       },
     });
@@ -65,13 +65,13 @@ export class ProductRepository {
       where: { id: product.id },
       data: {
         name: product.name,
-        quantity: product.quantity,
-        minQuantity: product.minQuantity,
+        //quantity: product.quantity,
+        //minQuantity: product.minQuantity,
         description: product.description,
-        code: product.code,
-        basePrice: product.basePrice,
+        // code: product.code,
+        // basePrice: product.basePrice,
         enable: product.enable,
-        photo: product.photo,
+        // photo: product.photo,
         updateAt: new Date(),
         ...mark,
       },
@@ -86,7 +86,7 @@ export class ProductRepository {
   async getById({ id }: ProductId) {
     return await prisma.product.findUnique({
       where: { id, deletedAt: null },
-      include: { productTag: { include: { tag: true } } },
+      // include: { productTag: { include: { tag: true } } },
     });
   }
 
@@ -95,6 +95,7 @@ export class ProductRepository {
   }
 
   async getTagsProductsByFilter({ text = '' }: SearchFilterProductStock) {
+    /*
     const info = await prisma.category.findMany({
       include: {
         tags: {
@@ -116,7 +117,9 @@ export class ProductRepository {
         },
       },
     });
-    return info;
+  */
+    //return info;
+    return {};
   }
 
   async getProductsByFilter({
@@ -129,7 +132,7 @@ export class ProductRepository {
     const take = pageSize;
 
     const where = {
-      enable: available,
+      // enable: available,
       OR: [{ name: { contains: text } }],
     };
 
@@ -137,7 +140,7 @@ export class ProductRepository {
       where,
       skip,
       take,
-      include: { mark: true },
+      //      include: { mark: true },
     });
 
     const totalItems = await prisma.product.count({ where });

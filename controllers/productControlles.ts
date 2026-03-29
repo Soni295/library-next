@@ -72,7 +72,9 @@ export class ProductController extends GeneralController {
           status: '500',
         };
       }
-      await this.productRepository.update(validatedProduct.data);
+      console.log(validatedProduct.data);
+
+      //await this.productRepository.update(validatedProduct.data);
     } catch (err) {
       if (err instanceof PrismaClientValidationError) {
         console.error('alto error PrismaClientValidationError', err.message);
@@ -168,10 +170,7 @@ export class ProductController extends GeneralController {
   }
 
   async getById(id: number) {
-    const product = await this.productRepository.getById({ id });
-
-    if (product == null) return null;
-    return { ...product, basePrice: product.basePrice.toNumber() };
+    return await this.productRepository.getById({ id });
   }
 
   async getProductsByFilter(pageSearchFilter: SearchFilterProductStock) {
@@ -192,8 +191,8 @@ export class ProductController extends GeneralController {
     const info = data.map((product) => ({
       id: product.id,
       name: product.name,
-      price: product.basePrice.toNumber(),
-      photo: product.photo,
+      //price: product.basePrice.toNumber(),
+      //photo: product.photo,
     }));
 
     return {
@@ -205,7 +204,6 @@ export class ProductController extends GeneralController {
     };
   }
 }
-
 @injectable()
 export class ProductControllerClient {
   constructor(
@@ -217,6 +215,9 @@ export class ProductControllerClient {
     const product = await this.productRepository.getById({ id });
 
     if (product == null) return null;
-    return { ...product, basePrice: product.basePrice.toNumber() };
+    return {
+      ...product,
+      //  basePrice: product.basePrice.toNumber()
+    };
   }
 }

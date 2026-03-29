@@ -1,50 +1,5 @@
-import NextAuth, { AuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-
-import { LoginInputSchema } from '@/app/lib/definitions/user';
-import { ServerErr } from '@/app/lib/errors/serverErr';
-import { userCtrl } from '@/app/lib/compose/inversify';
-import { revalidatePath } from 'next/cache';
-import { CLIENT_PATH } from '@/app/lib/paths';
-
-const authOptions = {
-  providers: [
-    CredentialsProvider({
-      name: 'Credentials',
-      credentials: {
-        email: { label: 'Email', type: 'text', placeholder: 'Manuel Rodrigez' },
-        password: {
-          label: 'contraseña',
-          type: 'password',
-          placeholder: '*******',
-        },
-      },
-      async authorize(credentials, req) {
-        const validationResult = LoginInputSchema.safeParse(credentials);
-        if (!validationResult.success) {
-          const err = validationResult.error.issues
-            .map((err) => err.message)
-            .join('<br>');
-
-          throw new Error(err);
-        }
-
-        const result = await userCtrl.login(validationResult.data);
-        if (result instanceof ServerErr) {
-          throw new Error(result.desc);
-        }
-
-        revalidatePath(CLIENT_PATH.HOME, 'layout');
-        return {
-          email: result.email,
-          name: result.name,
-          id: result.id,
-          image: undefined,
-        };
-      },
-    }),
-  ],
-} satisfies AuthOptions;
+import NextAuth from 'next-auth';
+import { authOptions } from '@/app/lib/auth/auth';
 
 const handler = NextAuth(authOptions);
 

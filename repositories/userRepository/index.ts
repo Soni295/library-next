@@ -9,10 +9,20 @@ export type MaybeUser = Maybe<UserPrisma>;
 export class UserRepository {
   async save(user: UserCreateInputServer): Promise<UserPrisma | null> {
     const count = await this.countOfUsers();
-    if (count === 0) {
-      return prisma.user.create({ data: { ...user, role: 'SUPERADMIN' } });
-    }
-    return prisma.user.create({ data: { ...user } });
+    let name = 'viewer';
+    if (count === 0) name = 'admin';
+    return prisma.user.create({
+      data: { ...user, roles: { create: { role: { connect: { name } } } } },
+    });
+  }
+
+  async getRolesByUserId(id: number) {
+    return prisma.userRole
+      .findMany({
+        where: { user: { id: id } },
+        include: { role: true },
+      })
+      .then((info) => info.map((i) => i.role));
   }
 
   async getUserById(id: number): Promise<UserPrisma | null> {

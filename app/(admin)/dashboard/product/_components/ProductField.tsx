@@ -16,9 +16,6 @@ export function ProductField({ info }: { info: ProductPage['data'][0] }) {
           {info.enable ? 'Disponible' : 'No disponible'}
         </Td>
       }
-      <Td className="text-right">{Number(info.basePrice).toFixed(2)}</Td>
-      <Td className="text-center">{Number(info.quantity)}</Td>
-      <Td className="text-center">{Number(info.minQuantity)}</Td>
     </Row>
   );
 }

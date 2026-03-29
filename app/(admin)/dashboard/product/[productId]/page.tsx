@@ -28,14 +28,11 @@ export default async function Page({
       productInfo={{
         id: id,
         name: data.name,
-        basePrice: data.basePrice,
         mark: data.markId ? String(data.markId) : 'no asignada',
         description: data.description || '',
-        quantity: data.quantity,
-        minQuantity: data.minQuantity,
-        code: data.code || '',
         enable: data.enable ? '1' : '0',
-        tags: data.productTag.map((t) => ({ id: t.tagId, name: t.tag.name })),
+        /*tags: data.productTag.map((t) => ({ id: t.tagId, name: t.tag.name
+         * }))*/
       }}
     />
   );

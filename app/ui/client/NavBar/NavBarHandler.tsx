@@ -1,27 +1,27 @@
-'use client';
-
 import clsx from 'clsx';
-import {
-  DashboardLink,
-  LoginLink,
-  NavbarCartLinkIcon,
-  SignInLink,
-} from './Links';
+import { LoginLink, NavbarCartLinkIcon, SignInLink } from './Links';
 import { NavbarBtnBurger, NavbarBtnLogout } from './Buttons';
 import { useNavbarContext } from './navbarContext';
+import { NavbarLink } from './NavbarLink';
+import { DASHBOARD_PATH } from '@/app/lib/paths';
 
 export function NavBarHandler() {
-  const { burgerActive } = useNavbarContext();
+  const { session, burgerActive, canSome } = useNavbarContext();
   const style = clsx(
     'fixed top-0 bg-brand-glass right-0 w-screen h-screen pt-14 sm:hidden',
     { hidden: !burgerActive },
   );
 
+  const permisos = ['create_product', 'edit_product'];
+  const isEditedUser = canSome(permisos);
+
   return (
     <>
       <div className="hidden sm:flex">
         <NavbarCartLinkIcon />
-        <DashboardLink />
+        {isEditedUser && (
+          <NavbarLink to={DASHBOARD_PATH.HOME}>Dashboard</NavbarLink>
+        )}
         <NavbarBtnLogout />
         <LoginLink />
         <SignInLink />
@@ -32,7 +32,9 @@ export function NavBarHandler() {
           <LoginLink />
           <SignInLink />
           <NavbarCartLinkIcon />
-          <DashboardLink />
+          {isEditedUser && (
+            <NavbarLink to={DASHBOARD_PATH.HOME}>Dashboard</NavbarLink>
+          )}
           <NavbarBtnLogout />
         </div>
       </div>

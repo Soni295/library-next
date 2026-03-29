@@ -14,7 +14,7 @@ export function Card({ id, photo, name, price }: ClientProductProps) {
         <p className="my-2 text-secondary-fontLight truncate text-ellipsis">
           {name}
         </p>
-        <p className="text-2xl">${price.toFixed(2)}</p>
+        {/*<p className="text-2xl">${price.toFixed(2)}</p>*/}
       </div>
     </Link>
   );

@@ -17,15 +17,14 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({ children }: Props) {
   const session = await getServerSession();
-
   return (
-    <html lang={INFO_STATIC.lang}>
-      <body className={`${inter.className} antialiased`}>
-        <SessionProvider session={session}>
+    <SessionProvider session={session}>
+      <html lang={INFO_STATIC.lang}>
+        <body className={`${inter.className} antialiased`}>
           {children}
           <Toaster />
-        </SessionProvider>
-      </body>
-    </html>
+        </body>
+      </html>
+    </SessionProvider>
   );
 }

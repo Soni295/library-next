@@ -6,168 +6,104 @@ generator client {
 }
 
 datasource db {
-  //provider = "mysql"
-  //url      = env("DATABASE_URL")
-
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
-  id Int @id @default(autoincrement())
-
-  name     String //@db.VarChar(255)
-  email    String  @unique //@db.VarChar(255)
-  password String //@db.VarChar(255)
-  //role     Role    @default(USER)
-  role     String  @default("USER")
-  enable   Boolean @default(true)
-
-  orders    Order[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
+  id        Int        @id @default(autoincrement())
+  name      String     @db.VarChar(255)
+  email     String     @unique @db.VarChar(255)
+  password  String     @db.VarChar(255)
+  enable    Boolean    @default(true)
+  roles     UserRole[]
+  createdAt DateTime   @default(now())
   deletedAt DateTime?
 }
 
-// enum Role {
-//   USER
-//   ADMIN
-//   SUPERADMIN
-// }
+model UserRole {
+  userId Int
+  roleId Int
 
-// enum OrderStatus {
-//   Selection
-//   Preparing
-//   Confirmed
-//   Done
-// }
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
 
-model ProductTag {
-  productId Int
-  product   Product @relation(fields: [productId], references: [id])
-
-  tagId Int
-  tag   Tag @relation(fields: [tagId], references: [id])
-
-  @@id([productId, tagId])
+  @@id([userId, roleId])
 }
 
-model Tag {
-  id   Int    @id @default(autoincrement())
-  name String
-
-  categoryId Int
-  category   Category @relation(fields: [categoryId], references: [id])
-
-  productTag ProductTag[]
-
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
-  deletedAt DateTime?
+model Role {
+  id          Int              @id @default(autoincrement())
+  name        String           @unique
+  permissions RolePermission[]
+  UserRole    UserRole[]
 }
 
-model Category {
-  id   Int    @id @default(autoincrement())
-  name String //@db.VarChar(255)
-  tags Tag[]
+model RolePermission {
+  roleId       Int
+  permissionId Int
 
-  //   createdAt DateTime  @default(now())
-  //   updateAt  DateTime  @default(now())
-  //   deletedAt DateTime?
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
 }
 
-model Mark {
-  id   Int    @id @default(autoincrement())
-  name String //@db.VarChar(255)
-
-  icon   String? //@db.VarChar(255)
-  enable Boolean @default(false)
-
-  products  Product[]
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @default(now())
-  deletedAt DateTime?
+model Permission {
+  id             Int              @id @default(autoincrement())
+  name           String           @unique
+  RolePermission RolePermission[]
 }
+
+enum ProductStatus {
+  Active
+  Draft
+  Archived
+}
+
+//
+//enum UserRole {
+//  USER
+//  ADMIN
+//  EDITOR
+//}
+//
+//enum PermissionResource {
+//  Product
+//  Variant
+//  Offer
+//}
+//
 
 model Product {
-  id          Int          @id @default(autoincrement())
-  name        String // @db.VarChar(255)
-  description String? // @db.MediumText
-  code        String? // @db.VarChar(255)
-  photo       String // @db.VarChar(255)
-  basePrice   Decimal //@db.Decimal(7, 2)
-  enable      Boolean      @default(false)
-  quantity    Int          @default(0)
-  minQuantity Int          @default(0)
-  markId      Int?
-  mark        Mark?        @relation(fields: [markId], references: [id])
-  //prices      Price[] // Relación con precios
-  //priceRules  PriceRules[]
-  // categoryId  Int?
-  // category    Category?        @relation(fields: [categoryId], references: [id])
-  // variants    ProductVariant[] // Relación con variantes de producto
-  orderItems  OrderItem[]
-  productTag  ProductTag[]
-  //order       ProductOnOrder[]
+  id     Int           @id @default(autoincrement())
+  status ProductStatus
+  name   String
 
   createdAt DateTime  @default(now())
-  updateAt  DateTime  @default(now())
+  updatedAt DateTime  @default(now())
   deletedAt DateTime?
 }
 
-// model Formula {
-//   id        Int  @id @default(autoincrement())
-//   priceRulesId Int
-//   priceRule PriceRule @relation(fields: [priceRulesId], references: [id])
-//   formula String
-// }
 //
-// model PriceRules {
-//   id        Int  @id @default(autoincrement())
-//   productId Int
-//   product    Product @relation(fields: [productId], references: [id])
-//   minQuantity Int
-//   discountPct  Decimal  @db.Decimal(7, 2)
 //
-//   finalPrice Decimal  @db.Decimal(7, 2)
-//   formula Formula?
-// }
-
-// model ProductOnOrder {
-//   productId Int
-//   product   Product @relation(fields: [productId], references: [id])
+////model Role {
+////  id          Int          @id @default(autoincrement())
+////  name        String       @unique @db.VarChar(25)
+////  description String       @db.VarChar(255)
+////  users       User[]
+////  permissions Permission[]
+////}
 //
-//   orderId Int
-//   order   Order @relation(fields: [orderId], references: [id])
 //
-//   @@id([productId, orderId])
-// }
-
-model OrderItem {
-  id       Int @id @default(autoincrement())
-  quantity Int
-
-  orderId Int
-  order   Order @relation(fields: [orderId], references: [id])
-
-  productId Int
-  product   Product @relation(fields: [productId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
-}
-
-model Order {
-  id         Int  @id @default(autoincrement())
-  customerId Int
-  customer   User @relation(fields: [customerId], references: [id])
-
-  //status   OrderStatus      @default(Selection)
-  status     String      @default("Selection")
-  orderItems OrderItem[]
-
-  createdAt DateTime  @default(now())
-  updateAt  DateTime  @default(now())
-  deletedAt DateTime?
-  //ProductOnOrder ProductOnOrder[]
-}
+//model Client {
+//  id       Int    @id @default(autoincrement())
+//  name     String @db.VarChar(50)
+//  lastName String @db.VarChar(50)
+//  email    String @db.VarChar(50)
+//  password String @db.VarChar(255)
+//}
+//
+//
+//model Order {
+//  id String @id @default(uuid())
+//}

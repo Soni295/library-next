@@ -21,8 +21,8 @@ export class UserController extends GeneralController {
     super();
   }
 
-  async isAdmin() {
-    return this.userPermissionVerifier.isAdmin();
+  async getRolesByUserId(userId: number) {
+    return this.userRepository.getRolesByUserId(userId);
   }
 
   async signIn(data: UserCreateInput) {
@@ -43,7 +43,6 @@ export class UserController extends GeneralController {
       id: newUser.id,
       name: newUser.name,
       email: newUser.email,
-      role: newUser.role,
     };
   }
 
@@ -59,7 +58,6 @@ export class UserController extends GeneralController {
       id: userDb.id,
       name: userDb.name,
       email: userDb.email,
-      role: userDb.role,
     };
   }
 
@@ -71,7 +69,6 @@ export class UserController extends GeneralController {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
     };
   }
 
@@ -83,7 +80,6 @@ export class UserController extends GeneralController {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role,
     };
   }
 
