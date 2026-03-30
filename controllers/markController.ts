@@ -24,10 +24,6 @@ export class MarkController extends GeneralController {
   }
 
   async update(formData: FormData) {
-    if (!(await this.userPermissionVerifier.isAdmin())) {
-      return { error: 'no autorizado', status: '500' };
-    }
-
     const file = formData.get('img.file') as File;
     const srcImg = formData.get('img.src') as string;
 
@@ -80,15 +76,10 @@ export class MarkController extends GeneralController {
         };
       }
     }
-
     return { status: '200' };
   }
 
   async save(formData: FormData) {
-    if (!(await this.userPermissionVerifier.isAdmin())) {
-      return { error: 'no autorizado', status: '500' };
-    }
-
     const file = formData.get('img.file') as File;
     try {
       const iconPath = await handlerImgMark.saveFile(file);

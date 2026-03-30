@@ -1,19 +1,17 @@
+import { ProductCreateInputSchema } from "@/app/lib/definitions/product";
 import { PrismaClient } from "@prisma/client";
+import { PERMISSIONS, perms } from "./permissions";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const adminpermissions = [
-    "create_product",
-    "delete_product",
-  ];
 
   const employeePermissions = [
-    "edit_product",
-    "view_product",
+    PERMISSIONS.product.view,
+    PERMISSIONS.mark.view,
   ]
 
-  const permissions = adminpermissions.concat(employeePermissions)
+  const permissions = perms
 
   for (const name of permissions) {
     await prisma.permission.upsert({

@@ -18,7 +18,7 @@ export class UserPermissionVerifier {
   }
 }
 
-@injectable()
+@injectable() // borrar eventualmente
 export class GeneralController {
   constructor(
     protected readonly userPermissionVerifier: UserPermissionVerifier = new UserPermissionVerifier(),
