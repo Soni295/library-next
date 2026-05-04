@@ -22,6 +22,7 @@ export default async function Page({
       />
     );
   }
+
   return (
     <ProductForm
       imgInfo={data.photo}

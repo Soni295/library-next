@@ -13,11 +13,9 @@ export default async function Layout({ children }: Props) {
   if (!session) redirect(CLIENT_PATH.HOME);
 
   const roles = await userCtrl.getRolesByUserId(session.user.id);
-
   if (!roles.some((r) => r.name == 'admin' || r.name == 'employee')) {
     redirect(CLIENT_PATH.HOME);
   }
-
   return (
     <div className="flex flex-row bg-neutral-100 min-h-screen w-screen overflow-hidden">
       <SideBar />

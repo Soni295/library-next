@@ -3,7 +3,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import { LoginInputSchema } from '@/app/lib/definitions/user';
 import { ServerErr } from '@/app/lib/errors/serverErr';
 import { userCtrl } from '@/app/lib/compose/inversify';
-import { getUserPermissions } from '@/app/lib/session';
 
 export const authOptions = {
   providers: [
@@ -27,7 +26,8 @@ export const authOptions = {
         if (result instanceof ServerErr) {
           throw new Error(result.desc);
         }
-        const permissions = await getUserPermissions(result.id);
+
+        const permissions = await userCtrl.getUserPermissions(result.id);
 
         return {
           email: result.email,

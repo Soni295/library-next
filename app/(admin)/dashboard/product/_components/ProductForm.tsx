@@ -96,7 +96,11 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
     if (img.file) {
       form.append('photo', img.file);
     }
-
+    const obj = {};
+    for (const [key, value] of form) {
+      obj[key] = value;
+    }
+    console.log(obj);
     if (!productInfo?.id) {
       const res = await createProductAction(form);
       if (res.status === '200')
@@ -188,30 +192,19 @@ export function ProductForm({ productInfo, imgInfo }: ProductFormProps) {
               placeholder="Es un lapiz semi duro"
             />
           </Field>
-          <AgregarVariante />
-        </div>
-
-        <div>
-          <div>etiqueta</div>
-          <InputTagSearch data={autoComplete} />
-          <div className="flex flex-col gap-1 mt-[0.2rem] overscroll-none">
-            {/*state.tags.map((tag) => (
-              <div
-                className="flex text-xs py-[0.05rem] px-[0.5rem] bg-blue-200"
-                key={`tag-${tag.id}-${tag.name}`}
-              >
-                <p className="flex-1 truncate">{tag.name}</p>
-                <span
-                  onClick={() => {
-                    deleteTag(tag.id, productInfo?.id);
-                  }}
-                  className="flex-none  text-slate-500  text-center text-bold hover:cursor-pointer hover:text-slate-900"
-                >
-                  x
-                </span>
-              </div>
-            ))*/}
-          </div>
+          <Field label="Precio Base" id="price" question={questions.basePrice}>
+            <Input
+              id="price"
+              name="basePrice"
+              step="0.01"
+              type="number"
+              value={state.basePrice}
+              onChange={handleChange}
+              placeholder="20.20"
+              min="1"
+              required
+            />
+          </Field>
         </div>
       </div>
       <SubmitBtn text={productInfo?.id ? 'Actualizar' : 'Crear'} />

@@ -17,7 +17,7 @@ export async function getAllProductsByFilter({
     where,
     skip,
     take,
-    include: { mark: true },
+    //include: { mark: true },
   });
 
   const totalItems = await prisma.product.count({ where });

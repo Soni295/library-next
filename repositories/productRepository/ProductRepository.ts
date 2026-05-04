@@ -10,25 +10,35 @@ import { MaybeProduct, MaybeProducts, ProductId } from './interface';
 @injectable()
 export class ProductRepository {
   async save(product: ProductCreateInput): Promise<MaybeProduct> {
+    /*
     const mark = product.markId
       ? { mark: { connect: { id: product.markId } } }
       : {};
+    */
     return await prisma.product.create({
       data: {
         name: product.name,
+        status: 'Active',
+      },
+    });
+    /*
+    return await prisma.product.create({
+      data: {
+        name: product.name,
+        status: true,
         //quantity: product.quantity,
         //minQuantity: product.minQuantity,
         //description: product.description,
         //code: product.code,
         //basePrice: product.basePrice,
-        //enable: product.enable,
         //photo: product.photo,
-        ...mark,
+        //...mark,
         //productTag: {
         //  create: product.tagIds.map((t) => ({ tag: { connect: { id: t } } })),
         //},
       },
     });
+    */
   }
 
   async addTag(info: {

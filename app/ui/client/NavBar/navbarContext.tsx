@@ -9,7 +9,7 @@ const NavbarContext = createContext<INavbarContext>({
   session: null,
   burgerActive: false,
   toggle(_mockValue) {},
-  canSome(permission: string[]) {},
+  canSome(_permission: string[]) {},
 });
 
 export const useNavbarContext = () => useContext(NavbarContext);

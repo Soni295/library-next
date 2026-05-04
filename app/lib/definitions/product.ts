@@ -18,15 +18,15 @@ const tagIds = z.array(z.number());
 
 export const ProductCreateInputSchema = z.object({
   name,
-  description,
-  basePrice,
-  quantity,
-  minQuantity,
-  code,
-  enable,
-  markId,
-  photo,
-  tagIds,
+  //description,
+  //basePrice,
+  //quantity,
+  //minQuantity,
+  //code,
+  //enable,
+  //markId,
+  //photo,
+  //tagIds,
 });
 
 export const ProductUpdateInputSchema = z.object({

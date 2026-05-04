@@ -61,6 +61,10 @@ export class UserController extends GeneralController {
     };
   }
 
+  async getUserPermissions(userId: number) {
+    return this.userRepository.getUserPermissions(userId);
+  }
+
   async getUserInformationById({ id }: { id: number }) {
     const user = await this.userRepository.getUserById(id);
     if (!user) throw ERR_SERVER_INTERNAL;

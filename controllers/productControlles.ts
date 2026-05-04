@@ -121,7 +121,6 @@ export class ProductController extends GeneralController {
   }
 
   async save(formData: FormData) {
-    this.userPermissionVerifier.isAdmin(); // cambiar luego
     try {
       const file = formData.get('photo') as File;
       const photo = await handlerImgProduct.saveFile(file);
@@ -140,18 +139,16 @@ export class ProductController extends GeneralController {
         photo: photo,
         quantity: Number(formData.get('quantity')),
         minQuantity: Number(formData.get('minQuantity')),
-        tagIds: tagIds.map((t) => t.id),
+        //tagIds: tagIds.map((t) => t.id),
       });
 
       if (!validatedProduct.success) {
         const err = validatedProduct.error.issues
           .map((err) => err.message)
           .join('<br>');
-        return {
-          error: err,
-          status: '500',
-        };
+        throw new Error(err);
       }
+
       await this.productRepository.save(validatedProduct.data);
     } catch (err) {
       if (err instanceof PrismaClientValidationError) {
@@ -160,10 +157,7 @@ export class ProductController extends GeneralController {
       console.log(err);
 
       if (err instanceof Error) {
-        return {
-          status: '500',
-          error: err.message,
-        };
+        throw new Error(err.message);
       }
     }
     return { status: '200' };

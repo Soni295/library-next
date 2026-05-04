@@ -1,8 +1,27 @@
 import { ProductCreateInputSchema } from "@/app/lib/definitions/product";
 import { PrismaClient } from "@prisma/client";
 import { PERMISSIONS, perms } from "./permissions";
+import { HandlerPassword } from "@/app/lib/utils/handlePassword";
 
 const prisma = new PrismaClient();
+
+
+async function force() {
+
+  const hash = await HandlerPassword.generateHash("123456");
+  try {
+    await prisma.user.create({
+      data: {
+        name: "example",
+        email: "example@hotmail.com",
+        password: hash,
+        roles: { create: { role: { connect: { name: "admin" } } } }
+      }
+    })
+  } catch (err) {
+    console.log(err)
+  }
+}
 
 async function main() {
 
@@ -74,7 +93,14 @@ async function main() {
   }
 }
 
+/*
 main()
   .then(() => console.log("Seed OK"))
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());
+*/
+
+force()
+  .then(() => console.log("force OK"))
   .catch(console.error)
   .finally(() => prisma.$disconnect());

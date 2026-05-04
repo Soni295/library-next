@@ -5,7 +5,7 @@
 	"scripts": {
 		"dev": "next dev",
 		"init": "node ./app/lib/auth/authz.ts",
-    "seed": "ts-node prisma/seed.ts",
+    	"seed": "npx tsx prisma/seed.ts",
 		"build:db": "npx prisma format && npx prisma db push",
 		"build:files": "mkdir -p ./public/uploads/{products,marks}",
 		"build:next": "next build",
